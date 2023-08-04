@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "microblogging-app"
+version = "0.1.0"
+description = ""
+authors = ["KaterinaPy35 <yakushka1308@mail.ru>"]
+readme = "README.md"
+packages = [{include = "microblogging_app"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+django = "4.2.4"
+dacite = "1.8.1"
+pillow = "10.0.0"
+psycopg2-binary = "2.9.6"
+python-dotenv = "1.0.0"
+
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.3.3"
+pylint = "2.17.5"
+
+[tool.mypy]
+mypy_path = "src/jobboard_app"
+disallow_untyped_defs = true
+check_untyped_defs = true
+strict_optional = true
+no_implicit_optional = true
+warn_return_any = true
+show_error_codes = true
+warn_unused_ignores = true
+
+[tool.black]
+skip-string-normalization = false
+line-length = 120
+
+[tool.isort]
+profile = "black"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
