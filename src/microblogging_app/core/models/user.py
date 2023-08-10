@@ -19,10 +19,10 @@ def user_photo_directory_path(instance: "User", filename: str) -> str:
 class User(BaseModel, AbstractUser):
     """Describes the fields and attributes of the User model in the database."""
 
-    bio = models.CharField(max_length=400)
+    description = models.CharField(max_length=400)
     photo = models.ImageField(upload_to=user_photo_directory_path, null=True)
     birth_date = models.DateField()
-    country = models.ForeignKey(to="Country", on_delete=models.CASCADE, related_name="user")
+    country = models.ForeignKey(to="Country", on_delete=models.CASCADE, related_name="users")
     followers = models.ManyToManyField(to="self", db_table="followers", symmetrical=False)
     email = models.EmailField(unique=True)
 
@@ -32,4 +32,4 @@ class User(BaseModel, AbstractUser):
     class Meta:
         """Describes class metadata."""
 
-        db_table = "user"
+        db_table = "users"

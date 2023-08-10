@@ -10,8 +10,8 @@ from django.db import models
 class Repost(BaseModel):
     """Describes the fields and attributes of the Repost model in the database."""
 
-    user = models.ForeignKey(to=get_user_model(), on_delete=models.CASCADE, related_name="repost")
-    tweet = models.ForeignKey(to="Tweet", on_delete=models.CASCADE, related_name="repost")
+    user = models.ForeignKey(to=get_user_model(), on_delete=models.CASCADE, related_name="tweet_reposts")
+    tweet = models.ForeignKey(to="Tweet", on_delete=models.CASCADE, related_name="reposts")
 
     class Meta:
         """Describes class metadata."""

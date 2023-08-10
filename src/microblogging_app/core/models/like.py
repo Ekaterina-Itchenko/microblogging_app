@@ -10,8 +10,8 @@ from django.db import models
 class Like(BaseModel):
     """Describes the fields and attributes of the Like model in the database."""
 
-    user = models.ForeignKey(to=get_user_model(), on_delete=models.CASCADE, related_name="like")
-    tweet = models.ForeignKey(to="Tweet", on_delete=models.CASCADE, related_name="like")
+    user = models.ForeignKey(to=get_user_model(), on_delete=models.CASCADE, related_name="tweet_likes")
+    tweet = models.ForeignKey(to="Tweet", on_delete=models.CASCADE, related_name="likes")
 
     class Meta:
         """Describes class metadata."""
