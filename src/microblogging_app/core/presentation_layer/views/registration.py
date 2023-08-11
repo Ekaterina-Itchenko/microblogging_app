@@ -1,7 +1,5 @@
 from __future__ import annotations
-from django.shortcuts import render, redirect
-from django.http import HttpResponseBadRequest, HttpResponse
-from django.views.decorators.http import require_http_methods
+
 from core.presentation_layer.forms import RegistrationForm
 from core.presentation_layer.converters import convert_data_from_form_to_dto
 from core.business_logic.dto import RegistrationDTO
@@ -12,18 +10,23 @@ from core.business_logic.errors import (
     ConfirmationCodeDoesNotExistError,
     ConfirmationCodeExpiredError
 )
+
+from django.shortcuts import render, redirect
+from django.http import HttpResponseBadRequest, HttpResponse
+from django.views.decorators.http import require_http_methods
+
 from typing import TYPE_CHECKING
-import logging
 
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
 
 
-logger = logging.getLogger(__name__)
-
-
 @require_http_methods(["GET", "POST"])
 def registrate_user_controller(request: HttpRequest) -> HttpResponse:
+    """
+    Controller for registration.
+    """
+
     if request.method == "GET":
         form = RegistrationForm()
         context = {"title": "Sign up", "form": form}
@@ -39,13 +42,6 @@ def registrate_user_controller(request: HttpRequest) -> HttpResponse:
                     "Please follow this link to confirm your registration"
                 )
             except UserAlreadyExistsError:
-                logger.error(
-                    msg="Invalid username or email.",
-                    extra={
-                        "username": received_data.username,
-                        "email": received_data.email
-                    }
-                )
                 return HttpResponseBadRequest(content="Such user already exists. Invalid username or password.")
 
         else:
@@ -55,17 +51,16 @@ def registrate_user_controller(request: HttpRequest) -> HttpResponse:
 
 @require_http_methods(["GET"])
 def confirm_registration_controller(request: HttpRequest) -> HttpResponse:
+    """
+    Controller to confirm a registration. After a confirmation redirects to the authentication page.
+    """
+
     received_code = request.GET["code"]
     try:
         confirm_user_registration(confirmation_code=received_code)
     except ConfirmationCodeDoesNotExistError:
-        logger.error(msg="Invalid confirmation code.", extra={"code": received_code, "user": request.user})
         return HttpResponseBadRequest(content="Invalid confirmation code")
     except ConfirmationCodeExpiredError:
-        logger.error(
-            msg="Expiration time of confirmation code has expired. The new link has been sent.",
-            extra={"old_code": received_code, "user": request.user}
-        )
         return HttpResponseBadRequest(
             content="The confirmation code is expired. The new confirmation link has been sent to your email."
                     "Please follow this link to confirm your registration."

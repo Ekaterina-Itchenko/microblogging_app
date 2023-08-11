@@ -1,6 +1,7 @@
 class UserAlreadyExistsError(Exception):
     ...
 
+
 class ConfirmationCodeDoesNotExistError(Exception):
     ...
 

@@ -15,10 +15,10 @@ from dotenv import load_dotenv
 from microblogging_app.logger_formatter import ContextFormatter
 
 
+load_dotenv()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-load_dotenv()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -29,16 +29,13 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ["DEBUG_MODE"]
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS: list = []
 
 AUTH_USER_MODEL = "core.User"
 
 AUTHENTICATION_BACKENDS = [
-        "microblogging_app.email_auth_backend.EmailAuthBackend",
         "django.contrib.auth.backends.ModelBackend",
-
 ]
-
 
 # Application definition
 
@@ -194,4 +191,4 @@ EMAIL_FROM = os.environ["EMAIL_FROM"]
 SERVER_HOST = os.environ["SERVER_HOST"]
 
 
-CONRIRMATION_CODE_EXPIRATION_TIME = 600
+CONFIRMATION_CODE_EXPIRATION_TIME = 600
