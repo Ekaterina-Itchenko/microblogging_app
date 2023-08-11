@@ -1,6 +1,6 @@
 from __future__ import annotations
 from django.shortcuts import render, redirect
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseBadRequest, HttpResponse
 from django.views.decorators.http import require_http_methods
 from core.presentation_layer.forms import RegistrationForm
 from core.presentation_layer.converters import convert_data_from_form_to_dto
@@ -36,7 +36,7 @@ def registrate_user_controller(request: HttpRequest) -> HttpResponse:
                 create_user(received_data=received_data)
                 return HttpResponse(
                     content="The confirmation link has been sent to your email."
-                            "Please follow this link to confirm your registration"
+                    "Please follow this link to confirm your registration"
                 )
             except UserAlreadyExistsError:
                 logger.error(

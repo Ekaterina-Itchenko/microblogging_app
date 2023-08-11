@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 def create_user(received_data: RegistrationDTO) -> None:
     user = get_user_model()
     try:
-        created_user = user.objects.create_user(
+        created_user = user.objects.create(
             email=received_data.email,
             username=received_data.username,
             birth_date=received_data.birth_date,
@@ -38,7 +38,6 @@ def create_user(received_data: RegistrationDTO) -> None:
     send_confirmation_email(user=created_user)
 
 
-
 def send_confirmation_email(user: get_user_model) -> EmailConfirmationCodes:
     confirmation_code = str(uuid4())
     expiration_time = settings.CONRIRMATION_CODE_EXPIRATION_TIME + int(time.time())
@@ -48,7 +47,7 @@ def send_confirmation_email(user: get_user_model) -> EmailConfirmationCodes:
         user=user,
         expiration=expiration_time
     )
-    confirmation_url = reverse("sign_up_confirmation") + f"?code={confirmation_code}"
+    confirmation_url = settings.SERVER_HOST + reverse("sign_up_confirmation") + f"?code={confirmation_code}"
     send_mail(
         subject="Confirm your email.",
         message=f"Please confirm your email by clicking the link below:\n\n{confirmation_url}",

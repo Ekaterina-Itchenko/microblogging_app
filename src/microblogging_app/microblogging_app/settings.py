@@ -31,11 +31,18 @@ DEBUG = os.environ["DEBUG_MODE"]
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = "core.User"
+
+AUTHENTICATION_BACKENDS = [
+        "microblogging_app.email_auth_backend.EmailAuthBackend",
+        "django.contrib.auth.backends.ModelBackend",
+
+]
+
 
 # Application definition
 
 INSTALLED_APPS = [
-    "core.apps.CoreConfig",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,6 +50,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "django.forms",
+    # internal
+    "core",
 ]
 
 MIDDLEWARE = [
@@ -179,7 +188,7 @@ EMAIL_PORT = os.environ["EMAIL_PORT"]
 EMAIL_HOST_USER = os.environ["EMAIL_HOST_USER"]
 EMAIL_HOST_PASSWORD = os.environ["EMAIL_HOST_PASSWORD"]
 EMAIL_USE_TLS = os.environ["EMAIL_USE_TLS"]
-EMAIL_USE_SSL = os.environ["EMAIL_USE_SSL"]
+
 EMAIL_BACKEND = os.environ["EMAIL_BACKEND"]
 EMAIL_FROM = os.environ["EMAIL_FROM"]
 SERVER_HOST = os.environ["SERVER_HOST"]
