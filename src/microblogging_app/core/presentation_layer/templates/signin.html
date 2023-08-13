@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Sign in for Microblogging</h1>
+    <form method="POST" action="{% url 'sign_in' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" id="submit">     <a href = "{% url 'sign_up' %}">Sign up</a>
+    </form>
+{% endblock content%}

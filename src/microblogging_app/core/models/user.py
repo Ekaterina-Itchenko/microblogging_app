@@ -22,7 +22,7 @@ class User(BaseModel, AbstractUser):
     description = models.CharField(max_length=400)
     photo = models.ImageField(upload_to=user_photo_directory_path, null=True)
     birth_date = models.DateField()
-    country = models.ForeignKey(to="Country", on_delete=models.CASCADE, related_name="users")
+    country = models.ForeignKey(to="Country", on_delete=models.CASCADE, related_name="users", null=True)
     followers = models.ManyToManyField(to="self", db_table="followers", symmetrical=False)
     email = models.EmailField(unique=True)
 
