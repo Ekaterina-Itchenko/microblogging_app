@@ -17,30 +17,25 @@ fake_data = Faker()
 class RandomValueFromListProvider:
     """Provider that generates random value from list."""
 
-    def __init__(self, values: list[int]) -> None:
+    def __init__(self, values: list[tuple[int,]]) -> None:
         self._values = values
 
     def __call__(self) -> int:
         random_value = choice(self._values)
-        if isinstance(random_value, tuple):
-            result: int = random_value[0]
-        else:
-            result = random_value
+        result: int = random_value[0]
         return result
 
 
 class RandomDistinctValueFromListProvider:
     """Provider that generates random value from list other than the one passed during the call."""
 
-    def __init__(self, values: list[int]) -> None:
+    def __init__(self, values: list[tuple[int,]]) -> None:
         self._values = values
 
     def __call__(self, value: int) -> int:
         random_value = choice(self._values)
-        if isinstance(random_value, tuple):
-            result: int = random_value[0]
-        else:
-            result = random_value
+        random_value = choice(self._values)
+        result: int = random_value[0]
         if result == value:
             return self.__call__(value=value)
         else:
@@ -50,15 +45,13 @@ class RandomDistinctValueFromListProvider:
 class RandomValueFromListOrNoneProvider:
     """Provider that generates random value from list."""
 
-    def __init__(self, values: list[int]) -> None:
+    def __init__(self, values: list[tuple[int,]]) -> None:
         self._values = values
 
     def __call__(self) -> Optional[int]:
         random_value = choice(self._values)
-        if isinstance(random_value, tuple):
-            result: int = random_value[0]
-        else:
-            result = random_value
+        random_value = choice(self._values)
+        result: int = random_value[0]
         final_result: Optional[int] = choice([result, None])
         return final_result
 
@@ -80,7 +73,7 @@ class RandomTagProvider:
 
 
 class RandomTextProvider:
-    """Provider that generates random Tag."""
+    """Provider that generates random text."""
 
     def __init__(self, max_length: int) -> None:
         self._max_length = max_length

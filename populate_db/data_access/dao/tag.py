@@ -33,9 +33,9 @@ class TagDAO(BaseDAO):
         else:
             self._db_gateway.connection.commit()
 
-    def get_ids_list(self) -> list[int]:
+    def get_ids_list(self) -> list[tuple[int,]]:
         """Gets ids from PostgreSQL table."""
 
         self._db_gateway.cursor.execute("SELECT id FROM tags;")
-        final_result: list[int] = self._db_gateway.cursor.fetchall()
+        final_result: list[tuple[int,]] = self._db_gateway.cursor.fetchall()
         return final_result
