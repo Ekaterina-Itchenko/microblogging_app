@@ -12,7 +12,7 @@ class Tweet(BaseModel):
 
     user = models.ForeignKey(to=get_user_model(), on_delete=models.CASCADE, related_name="tweets")
     content = models.CharField(max_length=400, null=False)
-    reply_to = models.ForeignKey(to="self", on_delete=models.CASCADE, related_name="tweets_replies")
+    reply_to = models.ForeignKey(to="self", on_delete=models.CASCADE, related_name="tweets_replies", null=True)
     reply_counter = models.PositiveIntegerField(default=0)
     like = models.ManyToManyField(to=get_user_model(), through="Like", related_name="tweets_likes")
     repost = models.ManyToManyField(to=get_user_model(), through="Repost", related_name="tweets_reposts")
