@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Tweets</h1>
+
+    <form method="get" action="">
+        <label for="order_by">Sort by:</label>
+        <select name="order_by" id="order_by">
+            <option value="newest" {% if order_by == 'newest' %}selected{% endif %}>Newest</option>
+            <option value="most_likes" {% if order_by == 'most_likes' %}selected{% endif %}>Most Likes</option>
+        </select>
+        <button type="submit">Apply</button>
+    </form>
+
+    <ul>
+        {% for tweet in tweets %}
+            <li>
+                <p>{{ tweet.content | urlize }}</p>
+                <p>Likes: {{ tweet.likes_count }} | Replies: {{ tweet.replies_count }} | Reposts: {{ tweet.reposts_count }}</p>
+                <p>Author: {{ tweet.user.get_full_name }} ({{ tweet.user.username }})</p>
+                <p>Creation Date: {{ tweet.creation_date }}</p>
+                <a href="{% url 'tweets:tweet_detail' tweet.id %}">Details</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if tweets.has_previous %}
+                <a href="?page=1&order_by={{ order_by }}">&laquo; First</a>
+                <a href="?page={{ tweets.previous_page_number }}&order_by={{ order_by }}">Previous</a>
+            {% endif %}
+            
+            <span class="current">
+                Page {{ tweets.number }} of {{ tweets.paginator.num_pages }}.
+            </span>
+            
+            {% if tweets.has_next %}
+                <a href="?page={{ tweets.next_page_number }}&order_by={{ order_by }}">Next</a>
+                <a href="?page={{ tweets.paginator.num_pages }}&order_by={{ order_by }}">Last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+{% endblock %}

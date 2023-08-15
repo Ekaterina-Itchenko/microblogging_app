@@ -1,24 +1,23 @@
 from __future__ import annotations
 
-from core.presentation_layer.forms import RegistrationForm
-from core.presentation_layer.converters import convert_data_from_form_to_dto
-from core.business_logic.dto import RegistrationDTO
-from core.presentation_layer.views import sign_in_controller
-from core.business_logic.services import create_user, confirm_user_registration
-from core.business_logic.errors import (
-    UserAlreadyExistsError,
-    ConfirmationCodeDoesNotExistError,
-    ConfirmationCodeExpiredError
-)
-
-from django.shortcuts import render, redirect
-from django.http import HttpResponseBadRequest, HttpResponse
-from django.views.decorators.http import require_http_methods
-
 from typing import TYPE_CHECKING
 
+from core.business_logic.dto import RegistrationDTO
+from core.business_logic.errors import (
+    ConfirmationCodeDoesNotExistError,
+    ConfirmationCodeExpiredError,
+    UserAlreadyExistsError,
+)
+from core.business_logic.services import confirm_user_registration, create_user
+from core.presentation_layer.converters import convert_data_from_form_to_dto
+from core.presentation_layer.forms import RegistrationForm
+from core.presentation_layer.views.sign_in import sign_in_controller
+from django.http import HttpResponse, HttpResponseBadRequest
+from django.shortcuts import redirect, render
+from django.views.decorators.http import require_http_methods
+
 if TYPE_CHECKING:
-    from django.http import HttpRequest, HttpResponse
+    from django.http import HttpRequest
 
 
 @require_http_methods(["GET", "POST"])
@@ -63,6 +62,6 @@ def confirm_registration_controller(request: HttpRequest) -> HttpResponse:
     except ConfirmationCodeExpiredError:
         return HttpResponseBadRequest(
             content="The confirmation code is expired. The new confirmation link has been sent to your email."
-                    "Please follow this link to confirm your registration."
+            "Please follow this link to confirm your registration."
         )
     return redirect(to=sign_in_controller)
