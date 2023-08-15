@@ -106,8 +106,8 @@ class RandomUserProfileProvider:
     def __call__(self) -> dict[str, str]:
         random_profile: dict = fake_data.simple_profile()
         username: str = random_profile["username"]
-        first_name: str = random_profile["name"][-2]
-        last_name: str = random_profile["name"][-1]
+        first_name: str = random_profile["name"].split()[-2]
+        last_name: str = random_profile["name"].split()[-1]
         mail: str = random_profile["mail"]
         result_profile: dict[str, str] = {
             "username": username,
