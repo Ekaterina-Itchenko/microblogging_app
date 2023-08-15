@@ -1,5 +1,8 @@
 from typing import TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from django.http import HttpRequest
+
 from core.business_logic.errors import UnauthorizedAction
 from core.business_logic.services import (
     create_tweet,
@@ -15,9 +18,6 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedire
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
-
-if TYPE_CHECKING:
-    from django.http import HttpRequest
 
 
 @require_http_methods(request_method_list=["GET", "POST"])
@@ -85,5 +85,5 @@ def repost_tweet_controller(request: HttpRequest, tweet_id: int) -> HttpResponse
         tweet = Tweet.objects.get(pk=tweet_id)
         repost_tweet(user, tweet)
         return HttpResponse(status=200)
-    except (Tweet.DoesNotExist, UnauthorizedAction) as e:
-        return HttpResponseBadRequest(str(e))
+    except (Tweet.DoesNotExist, UnauthorizedAction) as err:
+        return HttpResponseBadRequest(str(err))
