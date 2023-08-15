@@ -9,6 +9,22 @@ logger = logging.getLogger(__name__)
 
 
 class TweetData:
+    """
+    Data class representing information required to create a tweet.
+
+    Args:
+        user (User): The user creating the tweet.
+        content (str): The content of the tweet.
+        reply_to (Optional[Tweet]): The tweet being replied to, if any.
+        reply_counter (int): The number of replies to the tweet.
+
+    Attributes:
+        user (User): The user creating the tweet.
+        content (str): The content of the tweet.
+        reply_to (Optional[Tweet]): The tweet being replied to, if any.
+        reply_counter (int): The number of replies to the tweet.
+    """
+
     def __init__(self, user: User, content: str, reply_to: Optional[Tweet] = None, reply_counter: int = 0):
         self.user = user
         self.content = content
@@ -17,6 +33,15 @@ class TweetData:
 
 
 def create_tweet(data: TweetData) -> None:
+    """
+    Create a new tweet and update reply count if it's a reply.
+
+    Args:
+        data (TweetData): Data containing tweet information.
+
+    Returns:
+        None
+    """
     with transaction.atomic():
         Tweet.objects.create(
             user=data.user, content=data.content, reply_to=data.reply_to, reply_counter=data.reply_counter
@@ -27,10 +52,30 @@ def create_tweet(data: TweetData) -> None:
 
 
 def get_user_tweets(user: User) -> List[Tweet]:
+    """
+    Retrieve a list of tweets created by the given user.
+
+    Args:
+        user (User): The user whose tweets are to be retrieved.
+
+    Returns:
+        List[Tweet]: List of tweets by the user.
+    """
+
     return list(Tweet.objects.filter(user=user).order_by("-created_at"))
 
 
 def get_tweet_and_replies(tweet_id: int) -> Tuple[Tweet, List[Tweet]]:
+    """
+    Retrieve a tweet and its replies based on the tweet ID.
+
+    Args:
+        tweet_id (int): The ID of the tweet.
+
+    Returns:
+        Tuple[Tweet, List[Tweet]]: A tuple containing the tweet and its list of replies.
+    """
+
     try:
         tweet = Tweet.objects.get(pk=tweet_id)
     except Tweet.DoesNotExist as err:
@@ -42,22 +87,70 @@ def get_tweet_and_replies(tweet_id: int) -> Tuple[Tweet, List[Tweet]]:
 
 
 def get_tweets_from_following_users(user: User) -> List[Tweet]:
+    """
+    Retrieve tweets from users followed by the given user.
+
+    Args:
+        user (User): The user whose followed users' tweets are to be retrieved.
+
+    Returns:
+        List[Tweet]: List of tweets from followed users.
+    """
+
     following_users = user.followers.all()
     return list(Tweet.objects.filter(user__in=following_users).order_by("-created_at"))
 
 
 def get_reposts_from_following_users(user: User) -> List[Tweet]:
+    """
+    Retrieve reposted tweets from users followed by the given user.
+
+    Args:
+        user (User): The user whose followed users' reposted tweets are to be retrieved.
+
+    Returns:
+        List[Tweet]: List of reposted tweets from followed users.
+    """
+
     following_users = user.followers.all()
     return list(Tweet.objects.filter(repost__user__in=following_users).order_by("-created_at"))
 
 
 def like_tweet(user: User, tweet: Tweet) -> None:
+    """
+    Like a tweet.
+
+    Args:
+        user (User): The user performing the action.
+        tweet (Tweet): The tweet to be liked.
+
+    Raises:
+        UnauthorizedAction: If the user tries to like their own tweet.
+
+    Returns:
+        None
+    """
+
     if tweet.user == user:
         raise UnauthorizedAction("Cannot like own tweet")
     tweet.like.add(user)
 
 
 def repost_tweet(user: User, tweet: Tweet) -> None:
+    """
+    Repost a tweet.
+
+    Args:
+        user (User): The user performing the action.
+        tweet (Tweet): The tweet to be reposted.
+
+    Raises:
+        UnauthorizedAction: If the user tries to repost their own tweet.
+
+    Returns:
+        None
+    """
+
     if tweet.user == user:
         raise UnauthorizedAction("Cannot repost own tweet")
     tweet.repost.add(user)

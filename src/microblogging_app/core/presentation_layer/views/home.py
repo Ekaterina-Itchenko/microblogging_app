@@ -22,6 +22,16 @@ from django.views.decorators.http import require_http_methods
 
 @require_http_methods(request_method_list=["GET", "POST"])
 def index_controller(request: HttpRequest) -> HttpResponse:
+    """
+    Display the home page containing tweets and handling tweet creation.
+
+    Args:
+        request: The HTTP request.
+
+    Returns:
+        HttpResponse: The rendered home page.
+    """
+
     user = request.user
 
     if user.is_authenticated:
@@ -54,6 +64,17 @@ def index_controller(request: HttpRequest) -> HttpResponse:
 
 @require_http_methods(request_method_list=["GET"])
 def tweet_detail_controller(request: HttpRequest, tweet_id: int) -> HttpResponse:
+    """
+    Display the detail page of a tweet and its replies.
+
+    Args:
+        request: The HTTP request.
+        tweet_id: The ID of the tweet to display.
+
+    Returns:
+        HttpResponse: The rendered tweet detail page.
+    """
+
     tweet = get_object_or_404(Tweet, pk=tweet_id)
     tweet, replies = get_tweet_and_replies(tweet_id)
     context = {
@@ -65,6 +86,17 @@ def tweet_detail_controller(request: HttpRequest, tweet_id: int) -> HttpResponse
 
 @require_http_methods(request_method_list=["POST"])
 def like_tweet_controller(request: HttpRequest, tweet_id: int) -> HttpResponse:
+    """
+    Like a tweet.
+
+    Args:
+        request: The HTTP request.
+        tweet_id: The ID of the tweet to like.
+
+    Returns:
+        HttpResponse: A response indicating the result of the action.
+    """
+
     user = request.user  # Assuming users are properly authenticated
     if not user.is_authenticated:
         return HttpResponseBadRequest("You must be logged in to like a tweet.")
@@ -78,6 +110,17 @@ def like_tweet_controller(request: HttpRequest, tweet_id: int) -> HttpResponse:
 
 @require_http_methods(request_method_list=["POST"])
 def repost_tweet_controller(request: HttpRequest, tweet_id: int) -> HttpResponse:
+    """
+    Repost a tweet.
+
+    Args:
+        request: The HTTP request.
+        tweet_id: The ID of the tweet to repost.
+
+    Returns:
+        HttpResponse: A response indicating the result of the action.
+    """
+
     user = request.user  # Assuming users are properly authenticated
     if not user.is_authenticated:
         return HttpResponseBadRequest("You must be logged in to repost a tweet.")

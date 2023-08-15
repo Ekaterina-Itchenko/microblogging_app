@@ -13,5 +13,9 @@ if TYPE_CHECKING:
 
 @require_http_methods
 def logout_controller(request: HttpRequest) -> HttpResponse:
+    """
+    Log out the currently authenticated user and redirect to the sign-in page.
+    """
+
     logout(request=request)
     return redirect(to="sign_in")
