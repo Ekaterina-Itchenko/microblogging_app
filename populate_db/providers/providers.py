@@ -49,11 +49,13 @@ class RandomValueFromListOrNoneProvider:
         self._values = values
 
     def __call__(self) -> Optional[int]:
-        random_value = choice(self._values)
-        random_value = choice(self._values)
-        result: int = random_value[0]
-        final_result: Optional[int] = choice([result, None])
-        return final_result
+        if len(self._values) == 0:
+            return None
+        else:
+            random_value = choice(self._values)
+            result: int = random_value[0]
+            final_result: Optional[int] = choice([result, None])
+            return final_result
 
 
 class NotificationMessageProvider:

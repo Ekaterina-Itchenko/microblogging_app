@@ -32,6 +32,7 @@ from providers import (
     RandomTagProvider,
     RandomTextProvider,
     RandomUserProfileProvider,
+    RandomValueFromListOrNoneProvider,
     RandomValueFromListProvider,
 )
 
@@ -69,7 +70,7 @@ def populate_db(num: int) -> None:
     tweet_list = tweet_dao.get_ids_list()
     tweet_factory = TweetFactory(
         random_user_id_provider=RandomValueFromListProvider(values=users_list),
-        random_reply_to_provider=RandomValueFromListProvider(values=tweet_list),
+        random_reply_to_provider=RandomValueFromListOrNoneProvider(values=tweet_list),
         random_text_provider=RandomTextProvider(max_length=400),
     )
     PopulateTable(records_number=num, dao=tweet_dao, fake_factory=tweet_factory).execute()
