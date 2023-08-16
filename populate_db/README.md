@@ -44,11 +44,27 @@ LOG_LEVEL = 'INFO'
 To run the script in the directory where the script is located, run the following command:
 
 ```bash
-python3 populate_db -n <num_of_generated_data>
+python3 populate_db -n <num_of_generated_data> -t <table_name>
 ```
-
+AVAILABLE_FLAGS = ('-t', '-n')
 After -n flag you can specify number of generated data in the DB.
+Flag -n is required!
+After -t flag you can specify the table that you want to populate with data.
+If you not specify -t flag and table names after it, the script will populate all tables by default.
 The following command will add 100 records to each database table:
 ```bash
-python3 populate_db -n 100
+python3 populate_db -n 100 
+```
+The following command will add 100 records to 'users' table:
+```bash
+python3 populate_db -n 100 -t users
+```
+The following command will add 100 records to 'users' table and 'tweets' table:
+```bash
+python3 populate_db -n 100 -t users -t tweets
+```
+AVAILABLE_TABLES = ("all", "tags", "users", "tweets", "tweet_tags", "likes", "reposts", "notifications", "followers")
+If you specify "all" after -t flag, the script will populate all tables.
+```bash
+python3 populate_db -n 100 -t all
 ```
