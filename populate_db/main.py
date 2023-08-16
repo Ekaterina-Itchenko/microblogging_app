@@ -158,8 +158,12 @@ def populate_followers_table(num: int) -> None:
     """Populates followers table with random data."""
 
     users_list = UserDAO(db_gateway=db_gateway).get_ids_list()
-    if users_list == []:
-        raise EmptyDBException("We can't generate new records because users table is empty.")
+    if len(users_list) == 0:
+        raise EmptyDBException("We can't generate new records in followers table because users table is empty.")
+    if len(users_list) == 1:
+        raise EmptyDBException(
+            "We can't generate new records in followers table because there is just one record in users table."
+        )
     followers_dao = FollowersDAO(db_gateway=db_gateway)
     followers_factory = FollowersFactory(
         random_from_user_provider=RandomValueFromListProvider(users_list),
@@ -185,3 +189,5 @@ def populate_db(num: int, tables: list[str]) -> None:
         populate_likes_table(num=num)
     if "notifications" in tables:
         populate_notifications_table(num=num)
+    if "followers" in tables:
+        populate_followers_table(num=num)

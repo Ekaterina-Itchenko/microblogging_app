@@ -34,7 +34,6 @@ class RandomDistinctValueFromListProvider:
 
     def __call__(self, value: int) -> int:
         random_value = choice(self._values)
-        random_value = choice(self._values)
         result: int = random_value[0]
         if result == value:
             return self.__call__(value=value)
