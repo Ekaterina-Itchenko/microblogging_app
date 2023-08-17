@@ -34,7 +34,7 @@ class TweetDAO(BaseDAO):
         else:
             self._db_gateway.connection.commit()
         if data.reply_to is not None:
-            self._db_gateway.cursor.execute("SELECT reply_counter FROM tweets WHERE id = (%s)", (data.reply_to,))
+            self._db_gateway.cursor.execute("SELECT reply_counter FROM tweets WHERE id = (%s);", (data.reply_to,))
             tuple_res = self._db_gateway.cursor.fetchone()
             replies_counter_from_db = int(tuple_res[0])
             updated_replies_counter = replies_counter_from_db + 1
@@ -55,3 +55,11 @@ class TweetDAO(BaseDAO):
         self._db_gateway.cursor.execute("SELECT id FROM tweets;")
         final_result: list[tuple[int,]] = self._db_gateway.cursor.fetchall()
         return final_result
+
+    def get_user_id_by_tweet_id(self, tweet_id: int) -> int:
+        """Gets user_id from tweet table."""
+
+        self._db_gateway.cursor.execute("SELECT user_id FROM tweets WHERE id = (%s);", (tweet_id,))
+        tuple_res = self._db_gateway.cursor.fetchone()
+        result: int = int(tuple_res[0])
+        return result

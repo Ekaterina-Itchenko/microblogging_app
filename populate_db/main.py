@@ -110,13 +110,20 @@ def populate_reposts_table(num: int) -> None:
     users_list = UserDAO(db_gateway=db_gateway).get_ids_list()
     if users_list == []:
         raise EmptyDBException("We can't generate new records because users table is empty.")
-    tweets_list = TweetDAO(db_gateway=db_gateway).get_ids_list()
+    if len(users_list) == 1:
+        raise EmptyDBException(
+            "We can't generate new records in reposts table because there is just one record in users table. "
+            "User cannot repost their own tweets."
+        )
+    tweet_dao = TweetDAO(db_gateway=db_gateway)
+    tweets_list = tweet_dao.get_ids_list()
     if tweets_list == []:
         raise EmptyDBException("We can't generate new records because tweets table is empty.")
     reposts_dao = RepostDAO(db_gateway=db_gateway)
     reposts_factory = RepostFactory(
-        random_user_provider=RandomValueFromListProvider(values=users_list),
+        random_user_provider=RandomDistinctValueFromListProvider(values=users_list),
         random_tweet_provider=RandomValueFromListProvider(values=tweets_list),
+        tweet_dao=tweet_dao,
     )
     PopulateTable(records_number=num, dao=reposts_dao, fake_factory=reposts_factory).execute()
 
@@ -127,13 +134,20 @@ def populate_likes_table(num: int) -> None:
     users_list = UserDAO(db_gateway=db_gateway).get_ids_list()
     if users_list == []:
         raise EmptyDBException("We can't generate new records because users table is empty.")
-    tweets_list = TweetDAO(db_gateway=db_gateway).get_ids_list()
+    if len(users_list) == 1:
+        raise EmptyDBException(
+            "We can't generate new records in reposts table because there is just one record in users table. "
+            "User cannot repost their own tweets."
+        )
+    tweet_dao = TweetDAO(db_gateway=db_gateway)
+    tweets_list = tweet_dao.get_ids_list()
     if tweets_list == []:
         raise EmptyDBException("We can't generate new records because tweets table is empty.")
     like_dao = LikeDAO(db_gateway=db_gateway)
     like_factory = LikeFactory(
-        random_user_provider=RandomValueFromListProvider(values=users_list),
+        random_user_provider=RandomDistinctValueFromListProvider(values=users_list),
         random_tweet_provider=RandomValueFromListProvider(values=tweets_list),
+        tweet_dao=tweet_dao,
     )
     PopulateTable(records_number=num, dao=like_dao, fake_factory=like_factory).execute()
 
