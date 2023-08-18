@@ -8,7 +8,11 @@ class ConfirmationCodeDoesNotExistError(Exception):
 
 class ConfirmationCodeExpiredError(Exception):
     ...
-    
+
 
 class InvalidAuthCredentialsError(Exception):
+    ...
+
+
+class CountryNotEnteredError(Exception):
     ...
