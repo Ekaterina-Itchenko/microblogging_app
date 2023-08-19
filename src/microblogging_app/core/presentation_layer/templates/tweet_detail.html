@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Tweet Detail</h1>
+
+    <p>{{ tweet.content | urlize }}</p>
+    <p>Likes: {{ tweet.number_of_likes }} | Replies: {{ tweet.reply_counter }} | Reposts: {{ tweet.number_of_reposts }}</p>
+    <p>Author: {{ tweet.user.get_full_name }} ({{ tweet.user.username }})</p>
+    <p>Creation Date: {{ tweet.created_at }}</p>
+
+    <form method="post" action="{% url 'like_tweet' tweet.id %}">
+        {% csrf_token %}
+        <button type="submit">Like</button>
+    </form>
+
+    <form method="post" action="{% url 'repost_tweet' tweet.id %}">
+        {% csrf_token %}
+        <button type="submit">Repost</button>
+    </form>
+
+    <h2>Replies:</h2>
+    <ul>
+        {% for reply in replies %}
+            <li>{{ reply.content | urlize }}</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'home' %}">Back to Home</a>
+{% endblock %}

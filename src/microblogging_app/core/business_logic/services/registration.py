@@ -1,20 +1,21 @@
 from __future__ import annotations
+
+import logging
+import time
+from typing import TYPE_CHECKING
+from uuid import uuid4
+
 from core.business_logic.errors import (
-    UserAlreadyExistsError,
     ConfirmationCodeDoesNotExistError,
-    ConfirmationCodeExpiredError
+    ConfirmationCodeExpiredError,
+    UserAlreadyExistsError,
 )
 from core.models import EmailConfirmationCodes
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.mail import send_mail
 from django.db import IntegrityError
 from django.urls import reverse
-from django.core.mail import send_mail
-
-from typing import TYPE_CHECKING
-import logging
-import time
-from uuid import uuid4
 
 if TYPE_CHECKING:
     from core.business_logic.dto import RegistrationDTO
@@ -34,20 +35,20 @@ def create_user(received_data: RegistrationDTO) -> None:
             username=received_data.username,
             birth_date=received_data.birth_date,
             password=received_data.password,
-            is_active=False
+            is_active=False,
         )
         logger.info(msg="Created user.", extra={"user_email": received_data.email})
     except IntegrityError:
         logger.info(
             msg="Such email or username already exist.",
-            extra={"user_email": received_data.email, "username": received_data.username}
+            extra={"user_email": received_data.email, "username": received_data.username},
         )
         raise UserAlreadyExistsError
-    
+
     send_confirmation_email(user=created_user)
 
 
-def send_confirmation_email(user: User) -> EmailConfirmationCodes:
+def send_confirmation_email(user: User) -> None:
     """
     Send email to confirm a registration.
     Confirmation code is sent as a query parameter in a link.
@@ -56,22 +57,15 @@ def send_confirmation_email(user: User) -> EmailConfirmationCodes:
     confirmation_code = str(uuid4())
     expiration_time = settings.CONFIRMATION_CODE_EXPIRATION_TIME + int(time.time())
 
-    email_confirmation_object = EmailConfirmationCodes.objects.create(
-        code=confirmation_code,
-        user=user,
-        expiration=expiration_time
-    )
+    EmailConfirmationCodes.objects.create(code=confirmation_code, user=user, expiration=expiration_time)
     confirmation_url = settings.SERVER_HOST + reverse("sign_up_confirmation") + f"?code={confirmation_code}"
     send_mail(
         subject="Confirm your email.",
         message=f"Please confirm your email by clicking the link below:\n\n{confirmation_url}",
         from_email=settings.EMAIL_FROM,
-        recipient_list=[user.email]
+        recipient_list=[user.email],
     )
-    logger.info(
-        msg="Confirmation link has been sent.",
-        extra={"user": user.email, "code": confirmation_code}
-    )
+    logger.info(msg="Confirmation link has been sent.", extra={"user": user.email, "code": confirmation_code})
 
 
 def confirm_user_registration(confirmation_code: str) -> None:
@@ -86,20 +80,21 @@ def confirm_user_registration(confirmation_code: str) -> None:
     except EmailConfirmationCodes.DoesNotExist:
         logger.error("An invalid confirmation code has been received.")
         raise ConfirmationCodeDoesNotExistError
-    
+
     user = email_confirmation_object.user
     current_time = time.time()
     if current_time > email_confirmation_object.expiration:
         email_confirmation_object.delete()
         logger.info(
             msg="The confirmation code has been removed because expiration time is up.",
-            extra={"Current time": current_time, "Expiration time": email_confirmation_object.expiration}
+            extra={"Current time": current_time, "Expiration time": email_confirmation_object.expiration},
         )
 
         send_confirmation_email(user=user)
         logger.info(
             msg="The new confirmation code has been sent",
-            extra={"new_code": EmailConfirmationCodes.objects.get(user=user), "user": user})
+            extra={"new_code": EmailConfirmationCodes.objects.get(user=user), "user": user},
+        )
 
         raise ConfirmationCodeExpiredError
 
@@ -108,7 +103,4 @@ def confirm_user_registration(confirmation_code: str) -> None:
 
     user.save()
     email_confirmation_object.delete()
-    logger.info(
-        msg="The confirmation code has been removed because the user is activated.",
-        extra={"user": user.email}
-    )
+    logger.info(msg="The confirmation code has been removed because the user is activated.", extra={"user": user.email})
