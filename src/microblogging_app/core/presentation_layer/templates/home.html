@@ -1,4 +1,4 @@
-home {% extends "base.html" %}
+{% extends "base.html" %}
 
 {% block content %}
     <h1>Tweets</h1>
@@ -22,7 +22,7 @@ home {% extends "base.html" %}
                     {% csrf_token %}
                     <button type="submit">Like</button>
                 </form>
-                <form method="post" action="{% url 'trepost_tweet' tweet.id %}">
+                <form method="post" action="{% url 'repost_tweet' tweet.id %}">
                     {% csrf_token %}
                     <button type="submit">Repost</button>
                 </form>

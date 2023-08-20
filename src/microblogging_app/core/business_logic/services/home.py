@@ -1,6 +1,7 @@
 import logging
-from typing import List, Optional, Tuple
+from typing import List, Tuple
 
+from core.business_logic.dto.home import TweetDTO
 from core.business_logic.errors import TweetNotFound, UnauthorizedAction
 from core.models import Tweet, User
 from django.db import transaction
@@ -8,31 +9,7 @@ from django.db import transaction
 logger = logging.getLogger(__name__)
 
 
-class TweetData:
-    """
-    Data class representing information required to create a tweet.
-
-    Args:
-        user (User): The user creating the tweet.
-        content (str): The content of the tweet.
-        reply_to (Optional[Tweet]): The tweet being replied to, if any.
-        reply_counter (int): The number of replies to the tweet.
-
-    Attributes:
-        user (User): The user creating the tweet.
-        content (str): The content of the tweet.
-        reply_to (Optional[Tweet]): The tweet being replied to, if any.
-        reply_counter (int): The number of replies to the tweet.
-    """
-
-    def init(self, user: User, content: str, reply_to: Optional[Tweet] = None, reply_counter: int = 0) -> None:
-        self.user = user
-        self.content = content
-        self.reply_to = reply_to
-        self.reply_counter = reply_counter
-
-
-def create_tweet(data: TweetData) -> None:
+def create_tweet(data: TweetDTO) -> None:
     """
     Create a new tweet and update reply count if it's a reply.
 
