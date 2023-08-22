@@ -14,5 +14,13 @@ class InvalidAuthCredentialsError(Exception):
     ...
 
 
+class UnauthorizedAction(Exception):
+    ...
+
+
+class TweetNotFound(Exception):
+    ...
+
+  
 class CountryNotEnteredError(Exception):
     ...
