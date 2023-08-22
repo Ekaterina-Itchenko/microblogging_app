@@ -66,6 +66,7 @@ def send_confirmation_email(user: User) -> None:
         recipient_list=[user.email],
     )
     logger.info(msg="Confirmation link has been sent.", extra={"user": user.email, "code": confirmation_code})
+    return None
 
 
 def confirm_user_registration(confirmation_code: str) -> None:

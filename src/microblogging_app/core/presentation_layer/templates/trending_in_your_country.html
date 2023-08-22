@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <h1>Trending in your country</h1>
+    {% for tag in tags %}
+        <a href = "{% url 'tag_tweets' tag.id country_id %}">{{ tag.name|capfirst }}</a> {{ tag.num_tweets }} tweets<br><br>
+    {% endfor %}
+
+{% endblock content%}
