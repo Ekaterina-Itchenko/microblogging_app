@@ -4,8 +4,8 @@
     <h1>Tweet Detail</h1>
 
     <p>{{ tweet.content | urlize }}</p>
-    <p>Likes: {{ tweet.number_of_likes }} | Replies: {{ tweet.reply_counter }} | Reposts: {{ tweet.number_of_reposts }}</p>
-    <p>Author: {{ tweet.user.get_full_name }} ({{ tweet.user.username }})</p>
+    <p>Likes: {{ tweet.num_likes }} | Replies: {{ tweet.reply_counter }} | Reposts: {{ tweet.num_reposts }}</p>
+    <p>Author: {{ tweet.user.first_name }} {{ tweet.user.last_name }} ({{ tweet.user.username }})</p>
     <p>Creation Date: {{ tweet.created_at }}</p>
 
     <form method="post" action="{% url 'like_tweet' tweet.id %}">
@@ -18,12 +18,20 @@
         <button type="submit">Repost</button>
     </form>
 
+    <form method="post" action="{% url 'reply_tweet' tweet.id %}">
+        {% csrf_token %}
+        <button type="submit">Reply</button>
+    </form>
+
     <h2>Replies:</h2>
     <ul>
         {% for reply in replies %}
-            <li>{{ reply.content | urlize }}</li>
+            <li>{{ reply.content | urlize }}<br><br>
+                <small>
+                    {{ reply.created_at }}<br>
+                    {{ reply.user.first_name }} {{ reply.user.last_name }} ({{ reply.user.username }})<br>
+                </small>>
+            </li>
         {% endfor %}
     </ul>
-
-    <a href="{% url 'home' %}">Back to Home</a>
 {% endblock %}

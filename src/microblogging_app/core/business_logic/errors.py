@@ -21,6 +21,14 @@ class UnauthorizedAction(Exception):
 class TweetNotFound(Exception):
     ...
 
-  
+
+class TweetAlreadyLikedByUserError(Exception):
+    ...
+
+
+class TweetAlreadyRepostedByUserError(Exception):
+    ...
+
+
 class CountryNotEnteredError(Exception):
     ...
