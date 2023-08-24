@@ -30,5 +30,9 @@ class TweetAlreadyRepostedByUserError(Exception):
     ...
 
 
+class TagNotFound(Exception):
+    ...
+
+
 class CountryNotEnteredError(Exception):
     ...
