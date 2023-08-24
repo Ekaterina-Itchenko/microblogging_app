@@ -1,18 +1,17 @@
 from __future__ import annotations
 
-from core.presentation_layer.forms import SignInForm
-from core.presentation_layer.converters import convert_data_from_form_to_dto
+import logging
+from typing import TYPE_CHECKING
+
+from core.business_logic.dto import SignInDTO
 from core.business_logic.errors import InvalidAuthCredentialsError
 from core.business_logic.services import authenticate_user
-from core.business_logic.dto import SignInDTO
-
-from django.shortcuts import render
-from django.views.decorators.http import require_http_methods
-from django.http import HttpResponseBadRequest, HttpResponse
+from core.presentation_layer.converters import convert_data_from_form_to_dto
+from core.presentation_layer.forms import SignInForm
 from django.contrib.auth import login
-
-from typing import TYPE_CHECKING
-import logging
+from django.http import HttpResponseBadRequest
+from django.shortcuts import redirect, render
+from django.views.decorators.http import require_http_methods
 
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
@@ -39,11 +38,10 @@ def sign_in_controller(request: HttpRequest) -> HttpResponse:
                 user = authenticate_user(data=received_data)
             except InvalidAuthCredentialsError:
                 return HttpResponseBadRequest(content="Invalid credentials.")
-            
+
             login(request=request, user=user)
-            return HttpResponse("Index page")
-            # return redirect(to=index_controller)
- 
+            return redirect(to="home")
+
         else:
             context = {"title": "Sign up", "form": form}
             return render(request=request, template_name="signin.html", context=context)

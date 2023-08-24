@@ -10,6 +10,7 @@ urlpatterns = [
     path("tweet/<int:tweet_id>/", views.tweet_detail_controller, name="tweet_detail"),
     path("like/<int:tweet_id>/", views.like_tweet_controller, name="like_tweet"),
     path("repost/<int:tweet_id>/", views.repost_tweet_controller, name="repost_tweet"),
+    path("reply/<int:tweet_id>/", views.reply_tweet_controller, name="reply_tweet"),
     path("trending_in_your_country/", views.trending_in_your_country_controller, name="trending_in_your_country"),
     path("tag_tweets/<int:tag_id>/<int:country_id>/", views.get_tweets_from_tag_controller, name="tag_tweets"),
     path("tags/", views.select_tag_controller, name="select_tags"),

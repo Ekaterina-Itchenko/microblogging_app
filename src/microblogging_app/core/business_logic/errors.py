@@ -22,6 +22,14 @@ class TweetNotFound(Exception):
     ...
 
 
+class TweetAlreadyLikedByUserError(Exception):
+    ...
+
+
+class TweetAlreadyRepostedByUserError(Exception):
+    ...
+
+
 class TagNotFound(Exception):
     ...
 

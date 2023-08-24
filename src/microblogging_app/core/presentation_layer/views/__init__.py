@@ -1,6 +1,7 @@
 from .home import (
     index_controller,
     like_tweet_controller,
+    reply_tweet_controller,
     repost_tweet_controller,
     tweet_detail_controller,
 )
@@ -22,5 +23,6 @@ __all__ = [
     "logout_controller",
     "trending_in_your_country_controller",
     "get_tweets_from_tag_controller",
+    "reply_tweet_controller",
     "select_tag_controller",
 ]

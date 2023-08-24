@@ -19,7 +19,7 @@ def query_debugger(func: Callable[P, RT]) -> Callable[P, RT]:
         start_queries = len(connection.queries)
         res = func(*args, **kwargs)
         end_queries = len(connection.queries)
-        logger.info(msg=f"QUERIES QUANTITY {end_queries - start_queries}", extra={"func": func.__name__})
+        logger.info(msg=f"QUERIES QUANTITY {end_queries - start_queries}", extra={"func_name": func.__name__})
         return res
 
     return inner_func
