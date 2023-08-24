@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 from typing import TYPE_CHECKING
 
@@ -9,6 +11,7 @@ from microblogging_app.utils import query_debugger
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
+
 
 logger = logging.getLogger(__name__)
 

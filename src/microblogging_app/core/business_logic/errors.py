@@ -21,6 +21,10 @@ class UnauthorizedAction(Exception):
 class TweetNotFound(Exception):
     ...
 
-  
+
+class TagNotFound(Exception):
+    ...
+
+
 class CountryNotEnteredError(Exception):
     ...

@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
-from core.business_logic.services import get_tweets_from_tag_id
+from core.business_logic.services import get_tweets_by_tag_id_country_id
 from core.presentation_layer.pagination import CustomPagination, PageNotExists
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render
@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 def get_tweets_from_tag_controller(request: HttpRequest, tag_id: int, country_id: int) -> HttpResponse:
     """Controller to display tweets related with paticular tag."""
 
-    tweets, tag = get_tweets_from_tag_id(tag_id=tag_id, country_id=country_id)
+    tweets, tag = get_tweets_by_tag_id_country_id(tag_id=tag_id, country_id=country_id)
 
     page_number = request.GET.get("page", 1)
     paginator = CustomPagination(per_page=20)
