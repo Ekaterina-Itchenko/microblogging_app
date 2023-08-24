@@ -29,6 +29,6 @@ def trending_in_your_country_controller(request: HttpRequest) -> HttpResponse:
             context = {"tags": popular_tags, "country_id": country_id}
             return render(request=request, template_name="trending_in_your_country.html", context=context)
         except CountryNotEnteredError:
-            return HttpResponseBadRequest("Please, enter a country in your profile to see the data on this page.")
+            return HttpResponseBadRequest("Please, enter a country in your profile to see the data in this page.")
     else:
         return redirect(sign_in_controller)
