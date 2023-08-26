@@ -37,7 +37,9 @@ def select_tag_controller(request: HttpRequest) -> HttpResponse:
         try:
             tweets, tag = get_tweets_by_tag_name(data=received_data)
         except TagNotFound:
-            return HttpResponseBadRequest("Tag doesn't exist.")
+            logger.info(msg="The tag was not specified.")
+            empty_context = {"form": form}
+            return render(request=request, template_name="tag.html", context=empty_context)
 
         page_number = request.GET.get("page", 1)
         paginator = CustomPagination(per_page=20)

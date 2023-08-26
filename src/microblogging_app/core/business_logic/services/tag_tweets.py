@@ -8,8 +8,6 @@ from core.business_logic.services.trending_in_your_country import get_yesterday_
 from core.models import Tag, Tweet
 from django.db.models import Count
 
-from microblogging_app.utils import query_debugger
-
 if TYPE_CHECKING:
     from core.business_logic.dto import TagDTO
     from django.db.models import QuerySet
@@ -18,7 +16,6 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-@query_debugger
 def get_tweets_by_tag_name_country_name(tag_name: str, country_name: str) -> QuerySet:
     """Function accepts an id of tag, id of country and return a QuerySet object of tweets."""
 
@@ -44,7 +41,6 @@ def get_tweets_by_tag_name_country_name(tag_name: str, country_name: str) -> Que
     return tweets
 
 
-@query_debugger
 def get_tweets_by_tag_name(data: TagDTO) -> tuple[QuerySet, Tag]:
     """Function accepts TagDTO and return a QuerySet object of tweets."""
 
