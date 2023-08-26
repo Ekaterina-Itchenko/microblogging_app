@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% load static %}
+    <h1>Tweet Detail</h1>
+
+    {% include 'one_tweet.html' with tweet=tweet %}
+    <div class="card">
+        <div class="card-header">
+          <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+              <a class="nav-link"  href="{% url 'tweet_detail' tweet.id %}">Replies: {{ tweet.num_replies }} </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="true" href="">Liked by: {{ tweet.num_likes }} </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'tweet_detail_reposts' tweet.id %}">Reposted by: {{ tweet.num_reposts }} </a>
+          </ul>
+        </div>
+        <div class="card-body">
+            {% if tweet.like.all %}
+                <h4>Liked by:</h4>
+                <ul>
+                    {% for profile in tweet.like.all %}
+                        <div class="d-flex align-items-start border border-light">
+                            <a href="{% url 'profile' profile.username %}">
+                                {% if profile.photo %}
+                                    <img src="{{ profile.photo.url }}"; width="50" height="50" class="rounded-circle">
+                                {% else %}
+                                    <img src="{% static 'img/no_photo.png' %}"; width="50" height="50" class="rounded-circle">
+                                {% endif %}
+                            </a>
+                            <div class="w-100">
+                    
+                                <a href="{% url 'profile' profile.username %}" class="fw-bold fs-6 link-dark link-underline-opacity-0 link-underline-opacity-100-hover">
+                                    {{ profile.first_name }} {{ profile.last_name }}
+                                    <p><small class="text-muted">@{{profile.username}}</small></p>
+                                </a>
+                            </div>
+                            <div style="float: left;">
+                                {% if profile != user %}
+                                    {% if profile not in auth_user_following %}
+                                        <form method="post" action="{% url 'follow' profile.username %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="w-100 btn btn-outline-primary rounded-pill">Follow</button>
+                                        </form>
+                                    {% else %}
+                                        <form method="post" action="{% url 'unfollow' profile.username %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="w-100 btn btn-primary rounded-pill">Unfollow</button>
+                                        </form>
+                                        {% endif %}
+                                {% endif %}
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                    <h4>Still no likes...</h4>
+                {% endif %}
+        </div>
+      </div>
+    
+{% endblock %}

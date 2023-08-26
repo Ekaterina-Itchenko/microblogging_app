@@ -1,0 +1,63 @@
+{% load static %}
+<div class="container-fluid">
+    <div class="border border-light p-2 mb-3">
+        <h2 class="display-8 text-left">{{ profile.user.first_name }} {{ profile.user.last_name }}</h2>
+        <h6 class="text-left"><i class="bi bi-at"></i>   {{ profile.user.username }}</h6>
+        <div class="col-lg-12 d-flex align-items-center">
+            <div class="col-lg-3 text-center">
+                <link rel="stylesheet" href="{% static 'css/modal_photo.css' %}">
+                {% if profile.user.photo %}
+                    <img src="{{ profile.user.photo.url }}" alt="No photo" id="myImg" height="150px;" class="rounded-9">
+                {% else %}
+                    <img src="{% static 'img/no_photo.png' %}" alt="No photo" id="myImg" height="150px;" class="rounded-9">
+                {% endif %}
+                    <div id="myModal" class="modal">
+
+                    <!-- The Close Button -->
+                        <span class="close">&times;</span>
+
+                        <!-- Modal Content (The Image) -->
+                        <img class="modal-content" id="img01">
+                            
+                    <!-- Modal Caption (Image Text) -->
+                    <div id="caption"></div>
+                    </div>
+                    <script src="{% static 'js/modal_photo.js' %}"></script>
+            </div>
+            <div class="col-lg-6">
+                
+                <p class="text-muted"><i class="bi bi-envelope-at"></i>  Email: {{ profile.user.email }}</p>
+                <p class="text-muted"><i class="bi bi-calendar-check"></i>  Joined: {{ profile.user.created_at|date:"M d, Y" }}</p>
+                <p>{{ profile.user.description }}</p>
+                <p class="text-muted"><i class="bi bi-geo-alt-fill"></i>    {{ profile.user.country.name }}</p>
+                <a class="link-dark" href="{% url 'followers' profile.user.username %}"><strong>{{ profile.user.followers_num }}</strong> followers</a> | 
+                <a class="link-dark" href="{% url 'following' profile.user.username %}"><strong>{{ profile.user.following_num }}</strong> following</a>
+                
+            </div>
+            <div class="col-lg-3">
+                {% if profile.user == request.user %}
+                    <a class="w-100 btn btn-light" href="{% url 'profile_edit' %}">Edit profile</a>
+                {% else %}
+                    {% if profile.user not in user.following.all %}
+                        <form method="post" action="{% url 'follow' profile.user.username %}">
+                            {% csrf_token %}
+                            <button type="submit" class="w-100 btn btn-outline-primary rounded-pill">Follow</button>
+                        </form>
+                    {% else %}
+                        <form method="post" action="{% url 'unfollow' profile.user.username %}">
+                            {% csrf_token %}
+                            <button type="submit" class="w-100 btn btn-primary rounded-pill">Unfollow</button>
+                        </form>
+                    {% endif %}
+                {% endif %}
+            </div>
+            
+        </div>
+        <div class="col-lg-12">
+            
+        </div>
+    </div>
+    {% if profile.user == request.user %}
+        <a class="w-25 btn btn-outline-primary rounded-pill" href="{% url 'add_post' %} ">Add post</a>
+    {% endif %}
+    <hr>

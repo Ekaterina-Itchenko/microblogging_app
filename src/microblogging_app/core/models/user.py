@@ -23,7 +23,7 @@ class User(BaseModel, AbstractUser):
     photo = models.ImageField(upload_to=user_photo_directory_path, null=True)
     birth_date = models.DateField()
     country = models.ForeignKey(to="Country", on_delete=models.CASCADE, related_name="users", null=True)
-    followers = models.ManyToManyField(to="self", db_table="followers", symmetrical=False)
+    following = models.ManyToManyField(to="self", db_table="followers", symmetrical=False, related_name="followers")
     email = models.EmailField(unique=True)
 
     USERNAME_FIELD = "email"

@@ -1,33 +1,21 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Tweets</h1>
+    <h1>Posts</h1>
 
     <p>Sort by:
         <a href="?order_by=newest">Newest</a> |
         <a href="?order_by=most_likes">Most Likes</a>
     </p>
-
     <ul>
         {% for tweet in tweets %}
-            <li>
-                <p>{{ tweet.content | urlize }}</p>
-                <p>Likes: {{ tweet.number_of_likes }} | Replies: {{ tweet.reply_counter }} | Reposts: {{ tweet.number_of_reposts }}</p>
-                <p>Author: {{ tweet.user.get_full_name }} ({{ tweet.user.username }})</p>
-                <p>Creation Date: {{ tweet.created_at }}</p>
-                <a href="{% url 'tweet_detail' tweet.id %}">Details</a>
-
-                {% if user.is_authenticated %}
-                <form method="post" action="{% url 'like_tweet' tweet.id %}">
-                    {% csrf_token %}
-                    <button type="submit">Like</button>
-                </form>
-                <form method="post" action="{% url 'repost_tweet' tweet.id %}">
-                    {% csrf_token %}
-                    <button type="submit">Repost</button>
-                </form>
-            {% endif %}
-            </li>
+            {% for user in following_users %}
+                {% if user in tweet.repost.all %}
+                <i class="bi bi-reply"></i>
+                <small class="text-muted">reposted by <a class="link-dark link-underline-opacity-0 link-underline-opacity-100-hover" href="{% url 'profile' user.username %}">@{{ user.username }}</a> </small>
+                {% endif %}
+            {% endfor %}
+            {% include "one_tweet.html" with tweet=tweet %}
         {% endfor %}
     </ul>
 

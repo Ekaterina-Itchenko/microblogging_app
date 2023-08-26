@@ -1,5 +1,8 @@
 {% for field in form%}
-    {{ field.errors }}
-    {{ field.label_tag }} <br>
-    {{ field }} <br><br>
+    {{ field.label_tag }}
+    {% if field.help_text %}
+        <p><small class="text-muted"> *{{ field.help_text }}</small></p>
+    {% endif %}
+    {{ field }}
+    {{ field.errors }}<br>
 {% endfor %}

@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
-from core.business_logic.services import get_tweets_from_tag_id
+from core.business_logic.services import get_tweets_by_tag_name_country_name
 from django.core.paginator import EmptyPage, Paginator
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render
@@ -20,8 +20,8 @@ logger = logging.getLogger(__name__)
 
 @require_GET
 @query_debugger
-def get_tweets_from_tag_controller(request: HttpRequest, tag_id: int, country_id: int) -> HttpResponse:
-    """Controller to display tweets related with paticular tag."""
+def get_tweets_by_tag_country_controller(request: HttpRequest, tag_name: str, country_name: str) -> HttpResponse:
+    """Controller to display tweets related with passed tag in your country."""
 
     try:
         page_number = request.GET["page"]
@@ -29,8 +29,8 @@ def get_tweets_from_tag_controller(request: HttpRequest, tag_id: int, country_id
         logger.info(msg="Page query parameter does not exist.", extra={"query parameters": request.GET})
         page_number = 1
 
-    tweets = get_tweets_from_tag_id(tag_id=tag_id, country_id=country_id)
-    paginator = Paginator(tweets, 1)
+    tweets = get_tweets_by_tag_name_country_name(tag_name=tag_name, country_name=country_name)
+    paginator = Paginator(tweets, 20)
 
     try:
         tweets_paginated = paginator.page(page_number)
@@ -55,7 +55,7 @@ def get_tweets_from_tag_controller(request: HttpRequest, tag_id: int, country_id
         "next_page": next_page,
         "last_page": last_page,
         "tweets": tweets_paginated,
-        "tag_id": tag_id,
-        "country_id": country_id,
+        "tag_name": tag_name,
+        "country_name": country_name,
     }
     return render(request=request, template_name="tag_tweets.html", context=context)

@@ -1,15 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-
-    <h1>Tag: {{ tag.name }}</h1>
+    
+    <h2>Yesterday Posts with Tag <button class="btn btn-light rounded-pil" disabled><h2># {{ tag_name }}</h2></button> in <strong>{{ country_name }}</strong></h2>
+    
     {% for tweet in tweets %}
-        <h3>{{ tweet.user.username }}  ||   {{ tweet.user.first_name }} {{ tweet.user.last_name }}</h3>
-        <p>{{ tweet.content }}</p>
-        <h4>{{ tweet.reply_counter }} replies</h4>
+        {% include "one_tweet.html" with tweet=tweet %}
     {% endfor %}
 
     {% if previous_page is not None %}
-    <a href="?page=1">First</a>   
+    <a href="?page=1">First</a>
     <a href="?page={{ previous_page }}">Prev</a>
     {% endif %}
 

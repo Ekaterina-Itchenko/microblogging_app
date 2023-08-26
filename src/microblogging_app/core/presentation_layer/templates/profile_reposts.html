@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    {% include "profile_head.html" with profile=profile %}
+        
+        <div class="card">
+            <div class="card-header">
+              <ul class="nav nav-tabs card-header-tabs">
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'profile' profile.user.username %}">Posts</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="true" href="">Reposts</a>
+                </li>
+              </ul>
+            </div>
+            <div class="card-body">
+                {% for tweet in tweets %}
+                    {% if profile.user in tweet.repost.all %}
+                    <i class="bi bi-reply"></i>
+                    <small class="text-muted">reposted by <a class="link-dark link-underline-opacity-0 link-underline-opacity-100-hover" href="{% url 'profile' profile.user.username %}">@{{profile.user.username}}</a> </small>
+                    {% endif %}
+                    {% include "one_tweet.html" with tweet=tweet %}
+                {% endfor %}
+            </div>
+          </div>
+        
+        
+        <div class="pagination">
+            <span class="step-links">
+                {% if tweets.has_previous %}
+                    <a href="?page=1">&laquo; First</a>
+                    <a href="?page={{ tweets.previous_page_number }}">Previous</a>
+                {% endif %}
+    
+                <span class="current">
+                    Page {{ tweets.number }} of {{ tweets.paginator.num_pages }}.
+                </span>
+    
+                {% if tweets.has_next %}
+                    <a href="?page={{ tweets.next_page_number }}">Next</a>
+                    <a href="?page={{ tweets.paginator.num_pages }}">Last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+{% endblock %}

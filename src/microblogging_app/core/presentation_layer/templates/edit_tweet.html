@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    <form class=" mx-md-auto p-2 p-md-3 border rounded-4 bg-body-tertiary" method="POST" action="{% url 'tweet_edit' tweet_id %}">
+        <h1 class="text-center">Edit tweet</h1>
+        {% csrf_token %}
+        {{ form }}
+    <button class="w-25 btn btn-lg btn-primary rounded-pill" type="submit">Submit</button>
+    </form>
+{% endblock %}

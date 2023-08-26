@@ -15,10 +15,13 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods
 
+from microblogging_app.utils import query_debugger
+
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
 
 
+@query_debugger
 @require_http_methods(["GET", "POST"])
 def registrate_user_controller(request: HttpRequest) -> HttpResponse:
     """
@@ -47,6 +50,7 @@ def registrate_user_controller(request: HttpRequest) -> HttpResponse:
             return render(request=request, template_name="registration.html", context=context)
 
 
+@query_debugger
 @require_http_methods(["GET"])
 def confirm_registration_controller(request: HttpRequest) -> HttpResponse:
     """
