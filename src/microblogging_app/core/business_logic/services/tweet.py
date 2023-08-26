@@ -23,17 +23,6 @@ def create_tweet(data: AddTweetDTO) -> None:
     """
 
     with transaction.atomic():
-        tags: list[str] = re.split("[ \r\n]+", data.tags)
-        tags_list: list[Tag] = []
-        for tag in tags:
-            try:
-                tag_from_db = Tag.objects.get(name=tag.lower())
-            except Tag.DoesNotExist as err:
-                logger.warning("Tag doesn't exist.", extra={"Tag": tag}, exc_info=err)
-                tag_from_db = Tag.objects.create(name=tag.lower())
-                logger.info("Handled error and successfully created tag in db.", extra={"tag": tag})
-            tags_list.append(tag_from_db)
-
         if data.reply_to_id:
             try:
                 tweet_reply_to = Tweet.objects.get(pk=data.reply_to_id)
@@ -44,7 +33,18 @@ def create_tweet(data: AddTweetDTO) -> None:
             tweet_reply_to = None
 
         created_tweet = Tweet.objects.create(user=data.user, content=data.content, reply_to=tweet_reply_to)
-        created_tweet.tags.set(tags_list)
+        if data.tags != "":
+            tags: list[str] = re.split("[ \r\n]+", data.tags)
+            tags_list: list[Tag] = []
+            for tag in tags:
+                try:
+                    tag_from_db = Tag.objects.get(name=tag.lower())
+                except Tag.DoesNotExist as err:
+                    logger.warning("Tag doesn't exist.", extra={"Tag": tag}, exc_info=err)
+                    tag_from_db = Tag.objects.create(name=tag.lower())
+                    logger.info("Handled error and successfully created tag in db.", extra={"tag": tag})
+                tags_list.append(tag_from_db)
+            created_tweet.tags.set(tags_list)
         logger.info(
             "Successfully created tweet",
             extra={
@@ -91,24 +91,22 @@ def edit_tweet(data: EditTweetDTO) -> None:
         None
     """
     with transaction.atomic():
-        tags: list[str] = re.split("[ \r\n]+", data.tags)
-        tags_list: list[Tag] = []
-        for tag in tags:
-            try:
-                tag_from_db = Tag.objects.get(name=tag.lower())
-            except Tag.DoesNotExist as err:
-                logger.warning("Tag doesn't exist.", extra={"Tag": tag}, exc_info=err)
-                tag_from_db = Tag.objects.create(name=tag.lower())
-                logger.info("Handled error and successfully created tag in db.", extra={"tag": tag})
-            tags_list.append(tag_from_db)
-
         edited_tweet: Tweet = Tweet.objects.prefetch_related("tags").get(pk=data.tweet_id)
-        for tag in edited_tweet.tags.all():
-            if tag not in tags_list:
+        if data.tags != "":
+            tags: list[str] = re.split("[ \r\n]+", data.tags)
+            tags_list: list[Tag] = []
+            for tag in tags:
+                try:
+                    tag_from_db = Tag.objects.get(name=tag.lower())
+                except Tag.DoesNotExist as err:
+                    logger.warning("Tag doesn't exist.", extra={"Tag": tag}, exc_info=err)
+                    tag_from_db = Tag.objects.create(name=tag.lower())
+                    logger.info("Handled error and successfully created tag in db.", extra={"tag": tag})
+                tags_list.append(tag_from_db)
+            edited_tweet.tags.set(tags_list)
+        else:
+            for tag in edited_tweet.tags.all():
                 edited_tweet.tags.remove(tag)
-            else:
-                tags_list.remove(tag)  # type: ignore[arg-type]
         edited_tweet.content = data.content
-        edited_tweet.tags.set(tags_list)
         edited_tweet.save()
         logger.info("Successfully updated tweet", extra={"tweet_id": data.tweet_id, "content": data.content})
