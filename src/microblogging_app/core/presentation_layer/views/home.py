@@ -43,6 +43,7 @@ def index_controller(request: HttpRequest) -> HttpResponse:
 
     order_by = request.GET.get("order_by", "newest")
     ordered_tweets = ordering_tweets(tweets=tweets, condition=order_by)
+    ordered_tweets = ordering_tweets(tweets=tweets, condition=order_by)
 
     page_number = request.GET.get("page", 1)
     paginator = CustomPagination(per_page=20)

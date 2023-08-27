@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>Create reply to a tweet</h1>
+    <form method="POST" action="{% url 'reply_tweet' tweet_id %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" id="submit"><br>
+    </form>
+{% endblock content%}

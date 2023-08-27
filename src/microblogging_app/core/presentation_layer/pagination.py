@@ -1,5 +1,10 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
-from typing import Iterable
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from django.db.models import QuerySet
 
 from django.core.paginator import EmptyPage, Paginator
 
@@ -10,7 +15,7 @@ class PageNotExists(Exception):
 
 @dataclass
 class PaginationResponse:
-    data: Iterable
+    data: QuerySet
     next_page: int | None
     prev_page: int | None
 
@@ -21,7 +26,7 @@ class CustomPagination:
     def __init__(self, per_page: int) -> None:
         self._per_page = per_page
 
-    def paginate(self, data: Iterable, page_number: int) -> PaginationResponse:
+    def paginate(self, data: QuerySet, page_number: int) -> PaginationResponse:
         paginator = Paginator(data, self._per_page)
         try:
             data_paginated = paginator.page(page_number)

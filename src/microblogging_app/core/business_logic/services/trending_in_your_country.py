@@ -1,11 +1,18 @@
+from __future__ import annotations
+
 import logging
 from datetime import datetime, time, timedelta, timezone
+from typing import TYPE_CHECKING
 
 from core.business_logic.errors import CountryNotEnteredError
 from core.models import Tag
-from django.db.models import Count, QuerySet
+from django.db.models import Count
 
 from microblogging_app.utils import query_debugger
+
+if TYPE_CHECKING:
+    from django.db.models import QuerySet
+
 
 logger = logging.getLogger(__name__)
 
