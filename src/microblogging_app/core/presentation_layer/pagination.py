@@ -21,6 +21,8 @@ class PaginationResponse:
 
 
 class CustomPagination:
+    """Custom pagination object. Paginate data by passed per_page value."""
+
     def __init__(self, per_page: int) -> None:
         self._per_page = per_page
 

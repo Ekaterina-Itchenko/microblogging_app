@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <form class="mx-md-auto p-2 p-md-3 border rounded-4 bg-body-white" method="POST" action="{% url 'reply_tweet' replied_tweet.id %}">
+        <h2 class="text-center">Reply tweet</h1>
+        <div class="mx-md-auto p-2 p-md-3 border rounded-4 bg-body-tertiary">
+            <div class="d-flex align-items-start">
+                <a href="{% url 'profile' replied_tweet.user.username %}">
+                    {% if tweet.user.photo %}
+                        <img src="{{ replied_tweet.user.photo.url }}"; width="50" height="50" class="rounded-circle">
+                    {% else %}
+                        <img src="{% static 'img/no_photo.png' %}"; width="50" height="50" class="rounded-circle">
+                    {% endif %}
+                </a>
+                <div class="w-100">
+        
+                    <a href="{% url 'profile' replied_tweet.user.username %}" class="fw-bold fs-6 link-dark link-underline-opacity-0 link-underline-opacity-100-hover">
+                        {{ replied_tweet.user.first_name }} {{ replied_tweet.user.last_name }}
+                        <small class="text-muted">@{{replied_tweet.user.username}}</small>
+                    </a><br>
+                    <small class="text-muted">{{ replied_tweet.created_at }}</small>
+                </div>
+            </div>
+            {% if replied_tweet.reply_to %}
+            <div class="container">
+                <small class="text-muted">Reply to <a href="{% url 'tweet_detail' replied_tweet.reply_to.id %}"> post</a> <a href="{% url 'profile' replied_tweet.reply_to.user.username %}">@{{ replied_tweet.reply_to.user.username }}</a></small>
+                <div class="card p-2">{{ replied_tweet.content | urlize }}</div>
+                
+            </div>
+            {% else %}
+                <div class="container">{{ replied_tweet.content | urlize }}</div>
+            {% endif %}
+            {% if replied_tweet.tags.all %}
+            <div class="container">
+                Tags:
+                {% for tag in replied_tweet.tags.all %}
+                    <a href="#" class="btn btn-light rounded-pill">#{{ tag.name }}</a>
+                {% endfor %}
+                <div style="float: right;">
+                    <a class="link-secondary btn" href="{% url 'tweet_detail' replied_tweet.id %}">Detail ></a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="container p-2 p-md-3">
+        {% csrf_token %}
+        {{ form }}
+        <button class="w-25 btn btn-lg btn-primary rounded-pill" type="submit">Create</button>
+        </div>
+    </form>
+{% endblock %}

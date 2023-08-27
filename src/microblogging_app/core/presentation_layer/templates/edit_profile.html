@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+    <form class=" mx-md-auto p-2 p-md-3 border rounded-4 bg-body-tertiary" method="POST" action="{% url 'profile_edit' %}" enctype="multipart/form-data">
+        <h1 class="text-center">Edit profile</h1>
+        <div class="container text-center">
+        <div class="col-mg-3 text-center">
+            <link rel="stylesheet" href="{% static 'css/modal_photo.css' %}">
+            {% if request.user.photo %}
+                <img src="{{ user.photo.url }}" alt="User photo" id="myImg" height="110px;" class="rounded-circle">
+            {% else %}
+                <img src="{% static 'img/no_photo.png' %}" alt="No photo" id="myImg" height="110px;" class="rounded-9">
+            {% endif %}
+                <div id="myModal" class="modal">
+
+                <!-- The Close Button -->
+                    <span class="close">&times;</span>
+
+                    <!-- Modal Content (The Image) -->
+                    <img class="modal-content" id="img01">
+                        
+                <!-- Modal Caption (Image Text) -->
+                <div id="caption"></div>
+                </div>
+                <script src="{% static 'js/modal_photo.js' %}"></script>
+        </div>
+        <div class="col-mg-3 text-center">
+            <h2 class="display-8 text-left">{{ user.first_name }} {{ user.last_name }}</h2>
+            <h6 class="text-left"><i class="bi bi-at"></i>   {{ user.username }}</h6>
+        </div>
+    </div>
+        {% csrf_token %}
+        {{ form }}
+    <button class="w-25 btn btn-lg btn-primary rounded-pill" type="submit">Submit</button>
+    </form>
+{% endblock %}

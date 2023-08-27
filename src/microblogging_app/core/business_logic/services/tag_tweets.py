@@ -4,9 +4,9 @@ import logging
 from typing import TYPE_CHECKING
 
 from core.business_logic.errors import TagNotFound
+from core.business_logic.services.trending_in_your_country import get_yesterday_time
 from core.models import Tag, Tweet
-
-from microblogging_app.utils import query_debugger
+from django.db.models import Count
 
 if TYPE_CHECKING:
     from core.business_logic.dto import TagDTO
@@ -16,29 +16,47 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-@query_debugger
-def get_tweets_by_tag_id_country_id(tag_id: int, country_id: int) -> tuple[QuerySet, Tag]:
+def get_tweets_by_tag_name_country_name(tag_name: str, country_name: str) -> QuerySet:
     """Function accepts an id of tag, id of country and return a QuerySet object of tweets."""
 
-    try:
-        tag = Tag.objects.get(id=tag_id)
-        tweets = Tweet.objects.filter(user__country_id=country_id, tags__id=tag_id).select_related("user")
+    datetime_yesterday_start, datetime_yesterday_end = get_yesterday_time()
 
-    except Tag.DoesNotExist:
-        logger.error(msg="Tag does not exist", extra={"tag": tag_id})
-        raise TagNotFound
+    tweets = (
+        Tweet.objects.filter(
+            user__country__name=country_name,
+            tags__name=tag_name,
+            created_at__gt=datetime_yesterday_start,
+            created_at__lt=datetime_yesterday_end,
+        )
+        .select_related("user", "reply_to", "reply_to__user")
+        .annotate(
+            num_reposts=Count("reposts", distinct=True),
+            num_likes=Count("likes", distinct=True),
+            num_replies=Count("tweets_replies", distinct=True),
+        )
+        .prefetch_related("like", "repost", "tags")
+        .order_by("-created_at")
+    )
 
-    return tweets, tag
+    return tweets
 
 
-@query_debugger
-def get_tweets_by_tag_id(data: TagDTO) -> tuple[QuerySet, Tag]:
-    """Function accepts an id of tag and return a QuerySet object of tweets."""
+def get_tweets_by_tag_name(data: TagDTO) -> tuple[QuerySet, Tag]:
+    """Function accepts TagDTO and return a QuerySet object of tweets."""
 
     try:
         tag = Tag.objects.get(name=data.tag)
-        tweets = Tweet.objects.filter(tags=tag).select_related("user").order_by("-created_at", "content")
-
+        tweets = (
+            Tweet.objects.filter(tags=tag)
+            .select_related("user", "reply_to", "reply_to__user")
+            .annotate(
+                num_reposts=Count("reposts", distinct=True),
+                num_likes=Count("likes", distinct=True),
+                num_replies=Count("tweets_replies", distinct=True),
+            )
+            .prefetch_related("like", "repost", "tags")
+            .order_by("-created_at")
+        )
     except Tag.DoesNotExist:
         logger.error(msg="Tag does not exist", extra={"tag_name": data.tag})
         raise TagNotFound

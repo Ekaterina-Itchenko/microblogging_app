@@ -1,0 +1,126 @@
+{% load static %}
+<div class="border border-light p-2 mb-3">
+    <div class="d-flex align-items-start">
+        <a href="{% url 'profile' tweet.user.username %}">
+            {% if tweet.user.photo %}
+                <img src="{{ user.photo.url }}"; width="50" height="50" class="rounded-circle">
+            {% else %}
+                <img src="{% static 'img/no_photo.png' %}"; width="50" height="50" class="rounded-circle">
+            {% endif %}
+        </a>
+        <div class="w-100">
+
+            <a href="{% url 'profile' tweet.user.username %}" class="fw-bold fs-6 link-dark link-underline-opacity-0 link-underline-opacity-100-hover">
+                {{ tweet.user.first_name }} {{ tweet.user.last_name }}
+                <small class="text-muted">@{{tweet.user.username}}</small>
+            </a><br>
+            <small class="text-muted">{{ tweet.created_at }}</small>
+        </div>
+    </div>
+    {% if tweet.reply_to %}
+    <div class="container">
+        <small class="text-muted">Reply to <a href="{% url 'tweet_detail' tweet.reply_to.id %}"> post</a> <a href="{% url 'profile' tweet.reply_to.user.username %}">@{{ tweet.reply_to.user.username }}</a></small>
+        <div class="card p-2">{{ tweet.reply_to.content | urlize | truncatechars:30 }}  <a href="{% url 'tweet_detail' tweet.reply_to.id %}"> detail ></a></div>
+    </div>
+    {% endif %}
+        <div class="container">{{ tweet.content | urlize }}</div>
+    {% if tweet.tags.all %}
+    <div class="container">
+        Tags:
+        {% for tag in tweet.tags.all %}
+            <a href="{% url 'select_tags' %}?tag={{ tag.name }}" class="btn btn-light rounded-pill">#{{ tag.name }}</a>
+        {% endfor %}
+        
+    </div>
+    {% endif %}
+    
+</div>
+<div style="float: right;">
+    <a class="link-secondary btn" href="{% url 'tweet_detail' tweet.id %}">Detail ></a>
+</div>
+{% if tweet.user == request.user %}
+<div>
+    <div style="float: left;">
+        <form method="post" action="{% url 'like_tweet' tweet.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-light" disabled>Like
+                <i class="bi bi-heart"></i>
+                <span>{{ tweet.num_likes }}</span>
+            </button>
+        </form>
+    </div>
+    <div style="float: left;">
+        <form method="post" action="{% url 'repost_tweet' tweet.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-light" disabled>Repost
+                <i class="bi bi-reply"></i>
+                <span>{{ tweet.num_reposts }}</span>
+            </button>
+    </form>
+    </div>
+    <div style="float: left;">
+        <form  action="{% url 'reply_tweet' tweet.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-light">Reply
+                <i class="bi bi-chat"></i>
+                <span>{{ tweet.num_replies }}</span>
+            </button>
+        </form>
+    </div>
+    <div style="float: right;">
+        <a class="btn link-secondary" href="{% url 'tweet_edit' tweet.id %}">Edit</a>
+    </div>
+    
+</div>
+
+{% else %}
+<div>
+    <div style="float: left;">
+        <form method="post" action="{% url 'like_tweet' tweet.id %}">
+            {% csrf_token %}
+            {% if user not in tweet.like.all %}
+            <button type="submit" class="btn btn-light">Likes:
+                <i class="bi bi-heart"></i>
+                <span>{{ tweet.num_likes }}</span>
+            </button>
+            {% else %}
+            <button type="submit" class="btn btn-success" >Likes:
+                <i class="bi bi-heart-fill"></i>
+                <span>{{ tweet.num_likes }}</span>
+            </button>
+            {% endif %}
+        </form>
+    </div>
+    <div style="float: left;">
+        <form method="post" action="{% url 'repost_tweet' tweet.id %}">
+            {% csrf_token %}
+            {% if user not in tweet.repost.all %}
+            <button type="submit" class="btn btn-light">Reposts:
+                <i class="bi bi-reply"></i>
+                <span>{{ tweet.num_reposts }}</span>
+            </button>
+            {% else %}
+            <button type="submit" class="btn btn-warning">Reposts:
+                <i class="bi bi-reply-fill"></i>
+                <span>{{ tweet.num_reposts }}</span>
+            </button>
+            {% endif %}
+    </form>
+    </div>
+    <div style="float: left;">
+        <form  action="{% url 'reply_tweet' tweet.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-light">Reply
+                <i class="bi bi-chat"></i>
+                <span>{{ tweet.num_replies }}</span>
+            </button>
+        </form>
+    </div>
+    
+</div>
+
+{% endif %}
+
+<br>
+<br>
+<br>

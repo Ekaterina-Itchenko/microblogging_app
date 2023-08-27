@@ -10,8 +10,6 @@ from django.views.decorators.http import require_GET
 
 from microblogging_app.utils import query_debugger
 
-from .sign_in import sign_in_controller
-
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
 
@@ -23,12 +21,12 @@ def trending_in_your_country_controller(request: HttpRequest) -> HttpResponse:
 
     user = request.user
     if user.is_authenticated:
-        country_id = user.country_id
+        country_name = user.country.name
         try:
-            popular_tags = get_most_popular_tags(country_id=country_id)
-            context = {"tags": popular_tags, "country_id": country_id}
+            popular_tags = get_most_popular_tags(country_name=country_name)
+            context = {"tags": popular_tags, "country_name": country_name}
             return render(request=request, template_name="trending_in_your_country.html", context=context)
         except CountryNotEnteredError:
             return HttpResponseBadRequest("Please, enter a country in your profile to see the data in this page.")
     else:
-        return redirect(sign_in_controller)
+        return redirect("sign_in")

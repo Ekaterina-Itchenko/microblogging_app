@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block not_auth_content %}
+{% load static %} 
+<div class="container col-xl-10 col-xxl-8 px-4 py-5">
+  <div class="row align-items-center g-lg-5 py-5">
+    <div class="col-lg-7 text-center text-lg-start">
+      <img src="{% static 'img/logo.png' %}" class="d-block mx-auto mb-4" width="68" height="52" loading="lazy">
+      <h1 class="display-4 fw-bold lh-1 text-body-emphasis mb-3">Microblogging</h1>
+      <p class="fs-3">Just tell everyone what you're thinking!</p>
+      
+    </div>
+    <div class="col-md-10 mx-auto col-lg-5">
+      
+      <div class="p-4 p-md-5 border rounded-3 bg-body-tertiary" method="POST" action="{% url 'sign_in' %}" enctype="multipart/form-data">
+            <h4 class="display-7 fw-bold lh-1 text-center mb-3">Email has been changed.</h4>
+            <p>The confirmation link was sent to the specified email address: {{ new_email }}
+                Please follow the link in the email confirmation message.</p>
+            <small class="text-body-secondary">After confirmation you can sign in!</small>
+            <p><a class="w-75 btn btn-lg btn-primary" href="{% url 'sign_in' %}">Sign In!</a></p>
+        
+      </div>
+        
+
+        
+      
+    </div>
+  </div>
+</div>
+
+{% endblock %}

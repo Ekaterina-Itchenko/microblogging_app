@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+    <form class=" mx-md-auto p-2 p-md-3 border rounded-4 bg-body-tertiary" method="GET" action="{% url 'select_tags' %}">
+        <h1 class="text-center">Tags</h1>
+        {{ form }}
+        <br>
+    <button class="w-25 btn btn-lg btn-primary rounded-pill" type="submit">Submit</button>
+    </form>
+
+    {% if tag_name %}
+        <h2>Posts with Tag <button class="btn btn-light rounded-pil" disabled><h2># {{ tag_name }}</h2></button> in <strong>World</strong></h2>
+
+        {% for tweet in tweets %}
+            {% include "one_tweet.html" with tweet=tweet %}
+        {% endfor %}
+
+        {% if previous_page is not None %}
+            <a href="?page=1">First</a>
+            <a href="?page={{ previous_page }}">Prev</a>
+        {% endif %}
+
+        {% if next_page is not None %}
+            <a href="?page={{ next_page }}">Next</a>
+            <a href="?page={{ last_page }}">Last</a>
+
+        {% endif %}
+    {% endif %}
+{% endblock content%}

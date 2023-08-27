@@ -13,6 +13,8 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods
 
+from microblogging_app.utils import query_debugger
+
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
 
@@ -20,6 +22,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
+@query_debugger
 @require_http_methods(["POST", "GET"])
 def sign_in_controller(request: HttpRequest) -> HttpResponse:
     """
@@ -40,7 +43,7 @@ def sign_in_controller(request: HttpRequest) -> HttpResponse:
                 return HttpResponseBadRequest(content="Invalid credentials.")
 
             login(request=request, user=user)
-            return redirect(to="home")
+            return redirect(to="index")
 
         else:
             context = {"title": "Sign up", "form": form}
