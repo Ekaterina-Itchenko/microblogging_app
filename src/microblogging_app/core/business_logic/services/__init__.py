@@ -1,3 +1,4 @@
+from .country import get_countries
 from .follow import follow_user, unfollow_user, user_followers, user_following
 from .get_tags import get_tags_func
 from .home import get_replies, get_tweets_reposts_from_following_users, ordering_tweets
@@ -39,4 +40,5 @@ __all__ = [
     "get_tweets_by_tag_name",
     "get_tags_func",
     "get_profile_with_reposts_info",
+    "get_countries",
 ]

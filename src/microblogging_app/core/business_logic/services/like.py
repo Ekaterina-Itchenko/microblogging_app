@@ -8,11 +8,11 @@ logger = logging.getLogger(__name__)
 
 def like_tweet(user: User, tweet_id: int) -> None:
     """
-    Like a tweet.
+    Like and unlike a tweet.
 
     Args:
         user (User): The user performing the action.
-        tweet (Tweet): The tweet to be liked.
+        tweet_id (int): The ID of tweet to be liked.
 
     Raises:
         UnauthorizedAction: If the user tries to like their own tweet.

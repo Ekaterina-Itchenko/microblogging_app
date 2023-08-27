@@ -15,20 +15,20 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def follow_user(user: User, followed_user_username: str) -> None:
+def follow_user(authorized_user: User, followed_user_username: str) -> None:
     """Adds an authorized user to the followers of user with passed ID."""
 
     followed_user = get_user_model().objects.prefetch_related("followers").get(username=followed_user_username)
-    followed_user.followers.add(user)
-    logger.info(f"User '{user.username}' follow user {followed_user.username}.")
+    followed_user.followers.add(authorized_user)
+    logger.info(f"User '{authorized_user.username}' follow user {followed_user.username}.")
 
 
-def unfollow_user(user: User, followed_user_username: str) -> None:
+def unfollow_user(authorized_user: User, followed_user_username: str) -> None:
     """Removes an authorized user from the followers of user with passed ID."""
 
     followed_user = get_user_model().objects.prefetch_related("followers").get(username=followed_user_username)
-    followed_user.followers.remove(user)
-    logger.info(f"User '{user.username}'unfollow user {followed_user.username}.")
+    followed_user.followers.remove(authorized_user)
+    logger.info(f"User '{authorized_user.username}'unfollow user {followed_user.username}.")
 
 
 def user_followers(user_username: str) -> FollowersDTO:

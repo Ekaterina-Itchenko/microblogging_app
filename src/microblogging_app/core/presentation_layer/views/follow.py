@@ -29,8 +29,8 @@ def follow_controller(request: HttpRequest, username: str) -> HttpResponse:
 
     user = request.user
     if not user.is_authenticated:
-        logger.warning("Unauthorized attempt to like a tweet.")
-        return HttpResponseBadRequest("You must be logged in to like a tweet.")
+        logger.warning("Unauthorized attempt to follow user.")
+        return HttpResponseBadRequest("You must be logged in to follow a another user.")
 
     follow_user(user, followed_user_username=username)
     return redirect(to=request.META.get("HTTP_REFERER"))
@@ -43,8 +43,8 @@ def unfollow_controller(request: HttpRequest, username: str) -> HttpResponse:
 
     user = request.user
     if not user.is_authenticated:
-        logger.warning("Unauthorized attempt to like a tweet.")
-        return HttpResponseBadRequest("You must be logged in to like a tweet.")
+        logger.warning("Unauthorized attempt to unfollow user.")
+        return HttpResponseBadRequest("You must be logged in to unfollow another user.")
 
     unfollow_user(user, followed_user_username=username)
     return redirect(to=request.META.get("HTTP_REFERER"))

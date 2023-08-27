@@ -1,4 +1,4 @@
-from core.models import Country
+from core.business_logic.services import get_countries
 from core.presentation_layer.validators import (
     ValidateFileSize,
     ValidateImageExtensions,
@@ -6,7 +6,7 @@ from core.presentation_layer.validators import (
 )
 from django import forms
 
-COUNTRIES = [(value.name, value.name) for value in Country.objects.all()]
+countries = get_countries()
 
 
 class EditProfileForm(forms.Form):
@@ -56,7 +56,7 @@ class EditProfileForm(forms.Form):
         widget=forms.Textarea(attrs={"class": "form-control"}),
     )
     country = forms.ChoiceField(
-        label="Country", choices=COUNTRIES, required=True, widget=forms.Select(attrs={"class": "form-control"})
+        label="Country", choices=countries, required=True, widget=forms.Select(attrs={"class": "form-control"})
     )
     old_password = forms.CharField(
         label="Old password",

@@ -12,7 +12,7 @@ def repost_tweet(user: User, tweet_id: int) -> None:
 
     Args:
         user (User): The user performing the action.
-        tweet (Tweet): The tweet to be reposted.
+        tweet_id (int): The ID of tweet to be reposted.
     Raises:
         UnauthorizedAction: If the user tries to repost their own tweet.
 
