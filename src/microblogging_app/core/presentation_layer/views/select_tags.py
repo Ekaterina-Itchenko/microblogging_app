@@ -35,7 +35,9 @@ def select_tag_controller(request: HttpRequest) -> HttpResponse:
         received_data = convert_data_from_form_to_dto(TagDTO, form.cleaned_data)
 
         try:
-            tweets, tag = get_tweets_by_tag_name(data=received_data)
+            tag_tweet_dto = get_tweets_by_tag_name(data=received_data)
+            tweets = tag_tweet_dto.tweets
+            tag = tag_tweet_dto.tag
         except TagNotFound:
             logger.info(msg="The tag was not specified.")
             empty_context = {"form": form}

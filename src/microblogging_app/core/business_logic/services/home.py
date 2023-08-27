@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
+from core.business_logic.dto import FollowingTweetsRepostsDTO
 from core.models import Tweet, User
 from django.db.models import Count, Q
 
@@ -35,9 +36,9 @@ def get_replies(tweet_id: int) -> QuerySet:
     return replies
 
 
-def get_tweets_reposts_from_following_users(user: User) -> tuple[QuerySet, QuerySet]:
+def get_tweets_reposts_from_following_users(user: User) -> FollowingTweetsRepostsDTO:
     """
-    Retrieve tweets from users followed by the given user.
+    Retrieve tweets and reposted tweets from users followed by the given user.
     Args:
         user (User): The user whose followed users' tweets are to be retrieved.
     Returns:
@@ -46,7 +47,7 @@ def get_tweets_reposts_from_following_users(user: User) -> tuple[QuerySet, Query
 
     following_users = user.following.all()
 
-    result = (
+    tweets = (
         Tweet.objects.annotate(
             num_reposts=Count("reposts", distinct=True),
             num_likes=Count("likes", distinct=True),
@@ -57,8 +58,9 @@ def get_tweets_reposts_from_following_users(user: User) -> tuple[QuerySet, Query
         .filter(Q(user__in=following_users) | Q(reposts__user__in=following_users))
         .order_by("created_at")
     )
+    result_dto = FollowingTweetsRepostsDTO(tweets=tweets, following_users=following_users)
 
-    return result, following_users
+    return result_dto
 
 
 def ordering_tweets(tweets: QuerySet, condition: str) -> QuerySet:
@@ -66,7 +68,7 @@ def ordering_tweets(tweets: QuerySet, condition: str) -> QuerySet:
     Order tweets by received condition.
     Args:
        tweets (QuerySet): The user whose followed users' tweets are to be retrieved.
-       condition: Condition for ordering
+       condition (str): Condition for ordering
     Returns:
         Ordered QuerySet of tweets.
     """

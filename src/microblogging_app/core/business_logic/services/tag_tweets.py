@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
+from core.business_logic.dto import TweetTagsDTO
 from core.business_logic.errors import TagNotFound
 from core.business_logic.services.trending_in_your_country import get_yesterday_time
 from core.models import Tag, Tweet
@@ -41,8 +42,8 @@ def get_tweets_by_tag_name_country_name(tag_name: str, country_name: str) -> Que
     return tweets
 
 
-def get_tweets_by_tag_name(data: TagDTO) -> tuple[QuerySet, Tag]:
-    """Function accepts TagDTO and return a QuerySet object of tweets."""
+def get_tweets_by_tag_name(data: TagDTO) -> TweetTagsDTO:
+    """Function accepts TagDTO and return a TweetsQuerySet object of tweets."""
 
     try:
         tag = Tag.objects.get(name=data.tag)
@@ -57,8 +58,9 @@ def get_tweets_by_tag_name(data: TagDTO) -> tuple[QuerySet, Tag]:
             .prefetch_related("like", "repost", "tags")
             .order_by("-created_at")
         )
+        tag_tweet_dto = TweetTagsDTO(tweets=tweets, tag=tag)
     except Tag.DoesNotExist:
         logger.error(msg="Tag does not exist", extra={"tag_name": data.tag})
         raise TagNotFound
 
-    return tweets, tag
+    return tag_tweet_dto

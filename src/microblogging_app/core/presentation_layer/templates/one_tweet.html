@@ -59,13 +59,12 @@
     </form>
     </div>
     <div style="float: left;">
-        <form  action="{% url 'reply_tweet' tweet.id %}">
-            {% csrf_token %}
+        <a href="{% url 'reply_tweet' tweet.id %}">
             <button type="submit" class="btn btn-light">Reply
                 <i class="bi bi-chat"></i>
                 <span>{{ tweet.num_replies }}</span>
             </button>
-        </form>
+        </a>
     </div>
     <div style="float: right;">
         <a class="btn link-secondary" href="{% url 'tweet_edit' tweet.id %}">Edit</a>
@@ -108,13 +107,12 @@
     </form>
     </div>
     <div style="float: left;">
-        <form  action="{% url 'reply_tweet' tweet.id %}">
-            {% csrf_token %}
+        <a href="{% url 'reply_tweet' tweet.id %}">
             <button type="submit" class="btn btn-light">Reply
                 <i class="bi bi-chat"></i>
                 <span>{{ tweet.num_replies }}</span>
             </button>
-        </form>
+        </a>
     </div>
     
 </div>

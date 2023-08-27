@@ -46,8 +46,6 @@ def profile_controller(request: HttpRequest, username: str) -> HttpResponse:
         "profile": user_profile,
         "title": username,
         "tweets": tweets_paginated.data,
-        "next_page": tweets_paginated.next_page,
-        "prev_page": tweets_paginated.prev_page,
     }
 
     return render(request=request, template_name="profile.html", context=context)
@@ -69,8 +67,6 @@ def profile_reposts_controller(request: HttpRequest, username: str) -> HttpRespo
         "profile": user_profile,
         "title": username,
         "tweets": tweets_paginated.data,
-        "next_page": tweets_paginated.next_page,
-        "prev_page": tweets_paginated.prev_page,
     }
 
     return render(request=request, template_name="profile_reposts.html", context=context)

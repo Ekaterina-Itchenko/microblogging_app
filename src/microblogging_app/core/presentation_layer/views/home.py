@@ -37,7 +37,9 @@ def index_controller(request: HttpRequest) -> HttpResponse:
     user = request.user
 
     if user.is_authenticated:
-        tweets, following_users = get_tweets_reposts_from_following_users(user)
+        tweets_reposts_dto = get_tweets_reposts_from_following_users(user)
+        tweets = tweets_reposts_dto.tweets
+        following_users = tweets_reposts_dto.following_users
     else:
         return redirect(to="sign_in")
 
@@ -52,11 +54,5 @@ def index_controller(request: HttpRequest) -> HttpResponse:
     except PageNotExists:
         return HttpResponseBadRequest("Page with provided number doesn't exist.")
 
-    context = {
-        "tweets": tweets_paginated.data,
-        "order_by": order_by,
-        "following_users": following_users,
-        "next_page": tweets_paginated.next_page,
-        "prev_page": tweets_paginated.prev_page,
-    }
+    context = {"tweets": tweets_paginated.data, "order_by": order_by, "following_users": following_users}
     return render(request, "home.html", context)
