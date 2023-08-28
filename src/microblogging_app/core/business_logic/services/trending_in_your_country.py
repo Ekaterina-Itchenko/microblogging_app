@@ -31,10 +31,10 @@ def get_yesterday_time() -> tuple[datetime, datetime]:
 
 
 @query_debugger
-def get_most_popular_tags(country_name: int) -> QuerySet:
+def get_most_popular_tags(country_name: str) -> QuerySet:
     """
-    Function accepts an User object and return a QuerySet object that contains
-    10 most popular tags in a user's country.
+    Function accepts an User country_name(str) and return a QuerySet object that contains
+    10 most popular tags in a authorized user's country.
     """
 
     datetime_yesterday_start, datetime_yesterday_end = get_yesterday_time()
