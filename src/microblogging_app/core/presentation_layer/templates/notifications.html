@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <h1>{{ user.first_name|capfirst }} {{ user.last_name|capfirst }}  ({{ user.username }})</h1>
+    {% for notification in notifications %}
+        <li>
+            {{ notification.message | urlize }}
+            <p>Creation Date: {{ notification.created_at }}</p><br>
+        </li>
+    {% endfor %}
+
+{% endblock content%}

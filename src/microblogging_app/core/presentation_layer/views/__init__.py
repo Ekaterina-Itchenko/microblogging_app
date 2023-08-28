@@ -7,6 +7,7 @@ from .follow import (
 from .home import index_controller
 from .like import like_tweet_controller
 from .logout import logout_controller
+from .notifications import notifications_controller
 from .profile import (
     edit_profile_controller,
     profile_controller,
@@ -51,4 +52,5 @@ __all__ = [
     "profile_reposts_controller",
     "tweet_detail_controller_likes",
     "tweet_detail_controller_reposts",
+    "notifications_controller",
 ]

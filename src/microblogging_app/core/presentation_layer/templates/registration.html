@@ -11,7 +11,7 @@
     </div>
     <div class="col-md-10 mx-auto col-lg-5">
       
-      <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary" method="POST" action="{% url 'sign_in' %}" enctype="multipart/form-data">
+      <form class="p-4 p-md-5 border rounded-3 bg-body-tertiary" method="POST" action="{% url 'sign_up' %}" enctype="multipart/form-data">
           <h1 class="display-7 fw-bold lh-1 text-center mb-3">Sign up</h1>
           {% csrf_token %}
           {{ form }}

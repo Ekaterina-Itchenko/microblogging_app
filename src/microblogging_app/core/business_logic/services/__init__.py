@@ -3,6 +3,7 @@ from .follow import follow_user, unfollow_user, user_followers, user_following
 from .get_tags import get_tags_func
 from .home import get_replies, get_tweets_reposts_from_following_users, ordering_tweets
 from .like import like_tweet
+from .notifications import get_user_notifications
 from .profile import (
     edit_profile,
     get_profile_info,
@@ -41,4 +42,5 @@ __all__ = [
     "get_tags_func",
     "get_profile_with_reposts_info",
     "get_countries",
+    "get_user_notifications",
 ]
