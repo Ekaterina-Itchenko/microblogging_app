@@ -40,7 +40,8 @@ def like_tweet(user: User, tweet_id: int) -> None:
         logger.info(f"User '{user.username}' liked tweet with ID {tweet.pk}.")
         notification_type = NotificationType.objects.get(name="like")
         message = create_message(user=user, tweet=tweet, notification_type=notification_type)
-        Notification.objects.create(user=tweet.user, message=message, notification_type=notification_type)
+        notification = Notification.objects.create(message=message, notification_type=notification_type)
+        notification.user.add(tweet.user)
         logger.info(msg="Notification about like has been created", extra={"to_user": tweet.user_id, "tweet": tweet.pk})
     else:
         tweet.like.remove(user)

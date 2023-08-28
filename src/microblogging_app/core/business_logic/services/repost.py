@@ -29,7 +29,8 @@ def repost_tweet(user: User, tweet_id: int) -> None:
         logger.info(f"User '{user.username}' repost tweet with ID {tweet.pk}.")
         notification_type = NotificationType.objects.get(name="repost")
         message = create_message(user=user, tweet=tweet, notification_type=notification_type)
-        Notification.objects.create(user=tweet.user, message=message, notification_type=notification_type)
+        notification = Notification.objects.create(message=message, notification_type=notification_type)
+        notification.user.add(tweet.user)
         logger.info(
             msg="Notification about repost has been created", extra={"to_user": tweet.user_id, "tweet": tweet.pk}
         )

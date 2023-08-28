@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 @query_debugger
 def get_user_notifications(user: User) -> QuerySet:
     notifications = (
-        Notification.objects.filter(user_id=user.pk).select_related("notification_type").order_by("-created_at")
+        Notification.objects.filter(user__id=user.pk).select_related("notification_type").order_by("-created_at")
     )
     return notifications
 

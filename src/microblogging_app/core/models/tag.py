@@ -12,6 +12,9 @@ class Tag(BaseModel):
 
     name = models.CharField(max_length=30, unique=True)
 
+    def __str__(self) -> str:
+        return f"{self.name}"
+
     class Meta:
         """Describes class metadata."""
 
