@@ -1,12 +1,11 @@
-from core.business_logic.services import get_countries
+from typing import Any
+
 from core.presentation_layer.validators import (
     ValidateFileSize,
     ValidateImageExtensions,
     ValidateUserAge,
 )
 from django import forms
-
-countries = get_countries()
 
 
 class EditProfileForm(forms.Form):
@@ -55,9 +54,7 @@ class EditProfileForm(forms.Form):
         required=False,
         widget=forms.Textarea(attrs={"class": "form-control"}),
     )
-    country = forms.ChoiceField(
-        label="Country", choices=countries, required=True, widget=forms.Select(attrs={"class": "form-control"})
-    )
+    country = forms.ChoiceField(label="Country", required=True, widget=forms.Select(attrs={"class": "form-control"}))
     old_password = forms.CharField(
         label="Old password",
         widget=forms.PasswordInput(attrs={"class": "form-control"}),
@@ -69,3 +66,7 @@ class EditProfileForm(forms.Form):
     )
     user_id = forms.IntegerField(widget=forms.HiddenInput, label="")
     old_email = forms.EmailField(widget=forms.HiddenInput, label="")
+
+    def __init__(self, countries: list[tuple[str, str]], *args: Any, **kwargs: Any) -> None:
+        super(EditProfileForm, self).__init__(*args, **kwargs)
+        self.fields["country"].choices = countries

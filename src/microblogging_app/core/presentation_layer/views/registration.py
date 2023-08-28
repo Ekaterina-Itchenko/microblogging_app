@@ -38,13 +38,15 @@ def registrate_user_controller(request: HttpRequest) -> HttpResponse:
             received_data = convert_data_from_form_to_dto(RegistrationDTO, form.cleaned_data)
             try:
                 create_user(received_data=received_data)
-                return HttpResponse(
-                    content="The confirmation link has been sent to your email."
-                    "Please follow this link to confirm your registration"
-                )
+                context = {"new_email": received_data.email}
+                render(request=request, template_name="email_changed.html", context=context)
             except UserAlreadyExistsError:
-                return HttpResponseBadRequest(content="Such user already exists. Invalid username or password.")
-
+                context = {
+                    "title": "Sign up",
+                    "form": form,
+                    "err_message": "The user with the entered username or email already exists... Please try again.",
+                }
+                return render(request=request, template_name="registration.html", context=context)
         else:
             context = {"title": "Sign up", "form": form}
             return render(request=request, template_name="registration.html", context=context)

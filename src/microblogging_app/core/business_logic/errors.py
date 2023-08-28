@@ -24,7 +24,3 @@ class TweetNotFound(Exception):
 
 class TagNotFound(Exception):
     ...
-
-
-class CountryNotEnteredError(Exception):
-    ...
