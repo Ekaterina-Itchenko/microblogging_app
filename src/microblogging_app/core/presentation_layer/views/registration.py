@@ -39,7 +39,7 @@ def registrate_user_controller(request: HttpRequest) -> HttpResponse:
             try:
                 create_user(received_data=received_data)
                 context = {"new_email": received_data.email}
-                render(request=request, template_name="email_changed.html", context=context)
+                return render(request=request, template_name="email_changed.html", context=context)
             except UserAlreadyExistsError:
                 context = {
                     "title": "Sign up",
