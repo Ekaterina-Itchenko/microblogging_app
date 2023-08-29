@@ -49,7 +49,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.forms",
     # internal
-    "core",
+    "core.apps.CoreConfig",
 ]
 
 MIDDLEWARE = [

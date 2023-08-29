@@ -11,14 +11,14 @@ from core.business_logic.errors import (
 from core.business_logic.services import confirm_user_registration, create_user
 from core.presentation_layer.converters import convert_data_from_form_to_dto
 from core.presentation_layer.forms import RegistrationForm
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods
 
 from microblogging_app.utils import query_debugger
 
 if TYPE_CHECKING:
-    from django.http import HttpRequest, HttpResponse
+    from django.http import HttpRequest
 
 
 @query_debugger

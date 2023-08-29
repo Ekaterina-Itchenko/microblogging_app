@@ -11,7 +11,7 @@ class Notification(BaseModel):
     """Describes the fields and attributes of the Notification model in the database."""
 
     message = models.CharField(max_length=400, null=False)
-    user = models.ForeignKey(to=get_user_model(), on_delete=models.CASCADE, related_name="notifications")
+    user = models.ManyToManyField(to=get_user_model(), related_name="notifications")
     notification_type = models.ForeignKey(to="NotificationType", on_delete=models.CASCADE, related_name="notifications")
 
     class Meta:
@@ -24,6 +24,9 @@ class NotificationType(BaseModel):
     """Describes the fields and attributes of the Notification model in the database."""
 
     name = models.CharField(max_length=100, null=False, unique=True)
+
+    def __str__(self) -> str:
+        return f"{self.name}"
 
     class Meta:
         """Describes class metadata."""

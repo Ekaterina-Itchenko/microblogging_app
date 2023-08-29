@@ -29,4 +29,5 @@ urlpatterns = [
     path("profile/edit", views.edit_profile_controller, name="profile_edit"),
     path("tweet/<int:tweet_id>/liked_by/", views.tweet_detail_controller_likes, name="tweet_detail_likes"),
     path("tweet/<int:tweet_id>/reposted_by/", views.tweet_detail_controller_reposts, name="tweet_detail_reposts"),
+    path("notifications/", views.notifications_controller, name="notifications"),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
