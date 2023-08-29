@@ -197,3 +197,10 @@ SERVER_HOST = os.environ["SERVER_HOST"]
 
 
 CONFIRMATION_CODE_EXPIRATION_TIME = 600
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": os.environ["REDIS_URL"],
+    }
+}
