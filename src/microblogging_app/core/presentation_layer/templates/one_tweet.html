@@ -3,7 +3,7 @@
     <div class="d-flex align-items-start">
         <a href="{% url 'profile' tweet.user.username %}">
             {% if tweet.user.photo %}
-                <img src="{{ user.photo.url }}"; width="50" height="50" class="rounded-circle">
+                <img src="{{ tweet.user.photo.url }}"; width="50" height="50" class="rounded-circle">
             {% else %}
                 <img src="{% static 'img/no_photo.png' %}"; width="50" height="50" class="rounded-circle">
             {% endif %}
@@ -78,12 +78,12 @@
         <form method="post" action="{% url 'like_tweet' tweet.id %}">
             {% csrf_token %}
             {% if user not in tweet.like.all %}
-            <button type="submit" class="btn btn-light">Likes:
+            <button type="submit" class="btn btn-light">Like
                 <i class="bi bi-heart"></i>
                 <span>{{ tweet.num_likes }}</span>
             </button>
             {% else %}
-            <button type="submit" class="btn btn-success" >Likes:
+            <button type="submit" class="btn btn-success" >Like
                 <i class="bi bi-heart-fill"></i>
                 <span>{{ tweet.num_likes }}</span>
             </button>
@@ -94,12 +94,12 @@
         <form method="post" action="{% url 'repost_tweet' tweet.id %}">
             {% csrf_token %}
             {% if user not in tweet.repost.all %}
-            <button type="submit" class="btn btn-light">Reposts:
+            <button type="submit" class="btn btn-light">Repost
                 <i class="bi bi-reply"></i>
                 <span>{{ tweet.num_reposts }}</span>
             </button>
             {% else %}
-            <button type="submit" class="btn btn-warning">Reposts:
+            <button type="submit" class="btn btn-warning">Repost
                 <i class="bi bi-reply-fill"></i>
                 <span>{{ tweet.num_reposts }}</span>
             </button>

@@ -1,18 +1,31 @@
 {% extends "base.html" %}
 {% block content %}
 {% load static %}
-    <h1>Trending in your country</h1>
-    <p class="text-muted"><i class="bi bi-geo-alt-fill"></i>    {{ country_name }}</p>
-    <div class="p-3 p-md-3 border rounded-3">
-    {% for tag in tags %}
-    <div class="border border-light p-2 mb-3">
-        <div class="d-flex align-items-center">
-            <div class="col-lg-2">
-                <a class="btn btn-light rounded-pill" href="{% url 'tag_tweets' country_name tag.name %}">#{{ tag.name|capfirst }}</a>
-            </div> 
-            <div class="col-lg-8"> {{ tag.num_tweets }} posts</div> 
+    {% if country_not_exist %}
+        <h1>Trending in your country</h1>
+
+        <p>Oh no... You must specify your country in your profile to see the most popular tags in your country.</p>
+        <p>Please <a class="w-25 btn btn-light rounded-pill" href="{% url 'profile_edit' %}">Edit your profile</a></p>
+    {% else %}
+        <h1>Trending in your country</h1>
+        <p class="text-muted"><i class="bi bi-geo-alt-fill"></i>    {{ country_name }}</p>
+        <div class="p-3 p-md-3 border rounded-3">
+            {% if tags %}
+                {% for tag in tags %}
+                    <div class="border border-light p-2 mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="col-lg-2">
+                                <a class="btn btn-light rounded-pill" href="{% url 'tag_tweets' country_name tag.name %}">#{{ tag.name|capfirst }}</a>
+                            </div> 
+                            <div class="col-lg-8"> {{ tag.num_tweets }} posts</div> 
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+            
+                <p>Oh no... No one in your country tagged their posts yesterday...</p>
+                <h1><i class="bi bi-emoji-frown"></i></h1>
+            {% endif %}
         </div>
-    </div>
-    {% endfor %}
-    </div>
+    {% endif %}
 {% endblock content%}

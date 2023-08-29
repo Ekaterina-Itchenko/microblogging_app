@@ -9,7 +9,6 @@ from core.business_logic.services import authenticate_user
 from core.presentation_layer.converters import convert_data_from_form_to_dto
 from core.presentation_layer.forms import SignInForm
 from django.contrib.auth import login
-from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods
 
@@ -40,11 +39,17 @@ def sign_in_controller(request: HttpRequest) -> HttpResponse:
             try:
                 user = authenticate_user(data=received_data)
             except InvalidAuthCredentialsError:
-                return HttpResponseBadRequest(content="Invalid credentials.")
+                context = {
+                    "title": "Sign in",
+                    "form": form,
+                    "err_message": "Invalid credentials... \n Please try again.",
+                }
+
+                return render(request=request, template_name="signin.html", context=context)
 
             login(request=request, user=user)
             return redirect(to="index")
 
         else:
-            context = {"title": "Sign up", "form": form}
+            context = {"title": "Sign in", "form": form}
             return render(request=request, template_name="signin.html", context=context)

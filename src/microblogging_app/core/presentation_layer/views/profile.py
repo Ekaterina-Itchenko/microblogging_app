@@ -10,6 +10,7 @@ from core.business_logic.errors import (
 )
 from core.business_logic.services import (
     edit_profile,
+    get_countries,
     get_profile_info,
     get_profile_with_reposts_info,
 )
@@ -78,6 +79,9 @@ def edit_profile_controller(request: HttpRequest) -> HttpResponse:
     """
     Controller for editing user profile.
     """
+
+    countries = get_countries()
+
     profile_initial = {
         "first_name": request.user.first_name,
         "last_name": request.user.last_name,
@@ -85,18 +89,23 @@ def edit_profile_controller(request: HttpRequest) -> HttpResponse:
         "email": request.user.email,
         "birth_date": request.user.birth_date,
         "description": request.user.description,
-        "country": request.user.country.name,
         "user_id": request.user.pk,
         "old_email": request.user.email,
     }
-
+    if request.user.country:
+        country_name = (request.user.country.name,)
+        profile_initial["country"] = country_name
     if request.method == "GET":
-        form = EditProfileForm(initial=profile_initial)
+        form = EditProfileForm(countries=countries, initial=profile_initial)
         context = {"title": "Edit profile", "form": form}
         return render(request=request, template_name="edit_profile.html", context=context)
 
     else:
-        form = EditProfileForm(request.POST, request.FILES)
+        form = EditProfileForm(
+            countries,
+            request.POST,
+            request.FILES,
+        )
         if form.is_valid():
             received_data: EditProfileDTO = convert_data_from_form_to_dto(EditProfileDTO, form.cleaned_data)
             try:

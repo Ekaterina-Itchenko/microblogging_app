@@ -6,31 +6,40 @@
         <br>
     <button class="w-25 btn btn-lg btn-primary rounded-pill" type="submit">Submit</button>
     </form>
-
-    {% if tag_name %}
-        <h2>Posts with Tag <button class="btn btn-light rounded-pil" disabled><h2># {{ tag_name }}</h2></button> in <strong>World</strong></h2>
-
-        {% for tweet in tweets %}
-            {% include "one_tweet.html" with tweet=tweet %}
-        {% endfor %}
-
-
-        <div class="pagination">
-            <span class="step-links">
-                {% if tweets.has_previous %}
-                    <a href="?page=1&tag={{ tag_name }}">&laquo; First</a>
-                    <a href="?page={{ tweets.previous_page_number }}&tag={{ tag_name }}">Previous</a>
-                {% endif %}
+    {% if tweets %}
+        {% if tag_name %}
     
-                <span class="current">
-                    Page {{ tweets.number }} of {{ tweets.paginator.num_pages }}.
+            <h2>Posts with Tag <button class="btn btn-light rounded-pil" disabled><h2># {{ tag_name }}</h2></button> in <strong>World</strong></h2>
+
+            {% for tweet in tweets %}
+                {% include "one_tweet.html" with tweet=tweet %}
+            {% endfor %}
+
+
+            <div class="pagination">
+                <span class="step-links">
+                    {% if tweets.has_previous %}
+                        <a href="?page=1&tag={{ tag_name }}">&laquo; First</a>
+                        <a href="?page={{ tweets.previous_page_number }}&tag={{ tag_name }}">Previous</a>
+                    {% endif %}
+        
+                    <span class="current">
+                        Page {{ tweets.number }} of {{ tweets.paginator.num_pages }}.
+                    </span>
+        
+                    {% if tweets.has_next %}
+                        <a href="?page={{ tweets.next_page_number }}&tag={{ tag_name }}">Next</a>
+                        <a href="?page={{ tweets.paginator.num_pages }}&tag={{ tag_name }}">Last &raquo;</a>
+                    {% endif %}
                 </span>
-    
-                {% if tweets.has_next %}
-                    <a href="?page={{ tweets.next_page_number }}&tag={{ tag_name }}">Next</a>
-                    <a href="?page={{ tweets.paginator.num_pages }}&tag={{ tag_name }}">Last &raquo;</a>
-                {% endif %}
-            </span>
-        </div>
+            </div>
+            
+        {% endif %}
+    {% else %}
+        {% if not tag_name %}
+            <h2>Please select a Tag from the list.</h2>
+        {% else %}
+            <h2>Oh no... There aren't any posts with tag <button class="btn btn-light rounded-pil" disabled><h2># {{ tag_name }}</h2></button> <i class="bi bi-emoji-frown"></i></h2>
+            {% endif %}
     {% endif %}
 {% endblock content%}

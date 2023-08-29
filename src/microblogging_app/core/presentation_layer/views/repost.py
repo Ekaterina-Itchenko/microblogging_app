@@ -31,7 +31,7 @@ def repost_tweet_controller(request: HttpRequest, tweet_id: int) -> HttpResponse
         HttpResponse: A response indicating the result of the action.
     """
 
-    user = request.user  # Assuming users are properly authenticated
+    user = request.user
     if not user.is_authenticated:
         logger.warning("Unauthorized attempt to like a tweet.")
         return HttpResponseBadRequest("You must be logged in to repost a tweet.")
