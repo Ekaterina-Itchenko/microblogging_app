@@ -51,13 +51,6 @@ class UserAdmin(admin.ModelAdmin):
             return None
 
 
-class NotificationTypeAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "created_at"]
-    list_display_links = ["id", "name"]
-    ordering = ["id"]
-    list_per_page = 10
-
-
 class NotificationAdmin(admin.ModelAdmin):
     list_display = ["id", "message", "notification_type", "created_at"]
     list_display_links = ["id"]
@@ -65,6 +58,13 @@ class NotificationAdmin(admin.ModelAdmin):
     list_filter = ["notification_type"]
     ordering = ["created_at"]
     filter_horizontal = ["user"]
+
+
+class NotificationTypeAdmin(admin.ModelAdmin):
+    list_display = ["id", "name", "created_at"]
+    list_display_links = ["id", "name"]
+    ordering = ["id"]
+    list_per_page = 10
 
 
 class TweetAdmin(admin.ModelAdmin):
@@ -96,10 +96,10 @@ class LikeAdmin(admin.ModelAdmin):
     list_per_page = 10
 
 
+admin.site.register(User, UserAdmin)
+admin.site.register(Notification, NotificationAdmin)
+admin.site.register(NotificationType, NotificationTypeAdmin)
+admin.site.register(Tweet, TweetAdmin)
 admin.site.register(Like, LikeAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Repost, RepostAdmin)
-admin.site.register(NotificationType, NotificationTypeAdmin)
-admin.site.register(Tweet, TweetAdmin)
-admin.site.register(User, UserAdmin)
-admin.site.register(Notification, NotificationAdmin)

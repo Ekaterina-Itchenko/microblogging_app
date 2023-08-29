@@ -21,7 +21,7 @@ class User(BaseModel, AbstractUser):
 
     description = models.CharField(max_length=400, blank=True)
     photo = models.ImageField(upload_to=user_photo_directory_path, null=True, blank=True)
-    birth_date = models.DateField()
+    birth_date = models.DateField(blank=True, null=True)
     country = models.ForeignKey(to="Country", on_delete=models.CASCADE, related_name="users", null=True, blank=True)
     following = models.ManyToManyField(
         to="self", db_table="followers", symmetrical=False, related_name="followers", blank=True
