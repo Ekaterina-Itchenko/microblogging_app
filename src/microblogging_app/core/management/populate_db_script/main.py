@@ -43,8 +43,11 @@ DB_NAME = os.environ["DB_NAME"]
 DB_USER = os.environ["DB_USER"]
 DB_PASSWORD = os.environ["DB_PASSWORD"]
 DB_HOST = os.environ["DB_HOST"]
+DB_PORT = os.environ["DB_PORT"]
 
-db_gateway = PostgreSQLGateway(db_name=DB_NAME, db_user=DB_USER, db_password=DB_PASSWORD, db_host=DB_HOST)
+db_gateway = PostgreSQLGateway(
+    db_name=DB_NAME, db_user=DB_USER, db_password=DB_PASSWORD, db_host=DB_HOST, db_port=DB_PORT
+)
 
 
 def populate_tag_table(num: int) -> None:
@@ -161,6 +164,8 @@ def populate_notifications_table(num: int) -> None:
     notification_dao = NotificationDAO(db_gateway=db_gateway)
     notification_types_list = notification_dao.get_notification_type_id_list()
     notification_ids_list = notification_dao.get_notification_ids_list()
+    if len(notification_ids_list) == 0:
+        notification_ids_list.append((1,))
     notification_factory = NotificationFactory(
         notification_message_provider=NotificationMessageProvider(),
         random_user_provider=RandomValueFromListProvider(users_list),

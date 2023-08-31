@@ -32,11 +32,11 @@ class NotificationFactory:
     def generate(self) -> NotificationDTO:
         """Generates random data for NotificationDTO"""
 
-        notification_id = self._random_note_type_provider()
+        notification_type_id = self._random_note_type_provider()
         return NotificationDTO(
             user=NotificationUserDTO(
                 user_id=self._random_user_provider(), notification_id=self._random_notification_id_provider()
             ),
-            notification_type_id=notification_id,
-            message=self._notification_message_provider(random_note_type_id=notification_id),
+            notification_type_id=notification_type_id,
+            message=self._notification_message_provider(random_note_type_id=notification_type_id),
         )
