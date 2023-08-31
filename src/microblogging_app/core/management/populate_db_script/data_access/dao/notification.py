@@ -38,10 +38,10 @@ class NotificationDAO(BaseDAO):
         else:
             self._db_gateway.connection.commit()
 
-    def get_notification_type_id_list(self) -> list[tuple[int,]]:
+    def get_notification_type_id_admin(self) -> tuple[int,]:
         """Gets ids from PostgreSQL table."""
-        self._db_gateway.cursor.execute("SELECT id FROM notification_types;")
-        final_result: list[tuple[int,]] = self._db_gateway.cursor.fetchall()
+        self._db_gateway.cursor.execute("SELECT id FROM notification_types WHERE name = 'admin';")
+        final_result: tuple[int,] = self._db_gateway.cursor.fetchone()
         return final_result
 
     def get_notification_ids_list(self) -> list[tuple[int,]]:
