@@ -61,8 +61,8 @@ class NotificationMessageProvider:
     """Provider that generates notifications messages."""
 
     def __call__(self) -> str:
-        message = fake_data.text(max_nb_chars=randint(50, 400))
-        result_message = f'Test Admin Notification: \n {message}"'
+        message = fake_data.text(max_nb_chars=randint(50, 360))
+        result_message = f"Test Admin Notification: {message}"
         return result_message
 
 
