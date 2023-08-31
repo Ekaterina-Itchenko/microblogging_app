@@ -11,6 +11,10 @@ services:
       - pg_data:/var/lib/postgresql/data
     ports:
       - '5431:5432'
+  redis:
+    image: redis:latest
+    ports:
+      - '6379:6379'
 
   app:
     build: .
@@ -18,9 +22,12 @@ services:
       - '8000:8000'
     command: >
       sh -c 'python3 ./src/microblogging_app/manage.py migrate &&
+      python3 ./src/microblogging_app/manage.py populate_db -n 50 &&
+      python3 ./src/microblogging_app/manage.py populate_db -n 1000 -t tags tweets tweet_tags reposts likes notifications followers &&
       python3 ./src/microblogging_app/manage.py runserver 0.0.0.0:8000'
     depends_on:
       - db
+      - redis
 
 volumes:
   pg_data:

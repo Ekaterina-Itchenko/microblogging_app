@@ -35,15 +35,19 @@ class UserFactory:
         """Generates random data for UserDTO"""
 
         profile = self._random_profile_provider()
+        passwords = self._password_provider()
+        description = self._random_text_provider()
+        country_id = self._random_country_provider()
+        birth_date = self._random_birth_date_provider()
         return UserDTO(
-            description=self._random_text_provider(),
-            country_id=self._random_country_provider(),
-            birth_date=self._random_birth_date_provider(),
+            description=description,
+            country_id=country_id,
+            birth_date=birth_date,
             username=profile["username"],
             first_name=profile["first_name"],
             last_name=profile["last_name"],
             email=profile["email"],
             is_active=True,
-            encrypted_password=self._password_provider()["encrypted_password"],
-            unencrypted_password=self._password_provider()["unencrypted_password"],
+            encrypted_password=passwords["encrypted_password"],
+            unencrypted_password=passwords["unencrypted_password"],
         )

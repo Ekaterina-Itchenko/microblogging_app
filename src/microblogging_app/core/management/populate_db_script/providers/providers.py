@@ -2,7 +2,7 @@
 Contains Providers classes that generates random data for populating database.
 """
 
-from random import choice
+from random import choice, randint
 from typing import TYPE_CHECKING, Optional
 
 from django.contrib.auth.hashers import PBKDF2PasswordHasher
@@ -60,9 +60,10 @@ class RandomValueFromListOrNoneProvider:
 class NotificationMessageProvider:
     """Provider that generates notifications messages."""
 
-    def __call__(self, random_note_type_id: int) -> str:
-        message = f'Test Notification with ID {random_note_type_id} "'
-        return message
+    def __call__(self) -> str:
+        message = fake_data.text(max_nb_chars=randint(50, 360))
+        result_message = f"Test Admin Notification: {message}"
+        return result_message
 
 
 class RandomTagProvider:

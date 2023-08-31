@@ -43,8 +43,11 @@ DB_NAME = os.environ["DB_NAME"]
 DB_USER = os.environ["DB_USER"]
 DB_PASSWORD = os.environ["DB_PASSWORD"]
 DB_HOST = os.environ["DB_HOST"]
+DB_PORT = os.environ["DB_PORT"]
 
-db_gateway = PostgreSQLGateway(db_name=DB_NAME, db_user=DB_USER, db_password=DB_PASSWORD, db_host=DB_HOST)
+db_gateway = PostgreSQLGateway(
+    db_name=DB_NAME, db_user=DB_USER, db_password=DB_PASSWORD, db_host=DB_HOST, db_port=DB_PORT
+)
 
 
 def populate_tag_table(num: int) -> None:
@@ -153,19 +156,21 @@ def populate_likes_table(num: int) -> None:
 
 
 def populate_notifications_table(num: int) -> None:
-    """Populates notifications table with random data."""
+    """Populates notifications table with notifications from admin."""
 
     users_list = UserDAO(db_gateway=db_gateway).get_ids_list()
     if users_list == []:
         raise EmptyDBException("We can't generate new records because users table is empty.")
     notification_dao = NotificationDAO(db_gateway=db_gateway)
-    notification_types_list = notification_dao.get_notification_type_id_list()
+    notification_type_admin = notification_dao.get_notification_type_id_admin()
     notification_ids_list = notification_dao.get_notification_ids_list()
+    if len(notification_ids_list) == 0:
+        notification_ids_list.append((1,))
     notification_factory = NotificationFactory(
         notification_message_provider=NotificationMessageProvider(),
         random_user_provider=RandomValueFromListProvider(users_list),
         random_notification_id_provider=RandomValueFromListProvider(notification_ids_list),
-        random_note_type_provider=RandomValueFromListProvider(values=notification_types_list),
+        random_note_type_provider=RandomValueFromListProvider([notification_type_admin]),
     )
     PopulateTable(records_number=num, dao=notification_dao, fake_factory=notification_factory).execute()
 

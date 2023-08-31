@@ -23,4 +23,4 @@ RUN apt-get update \
 
 COPY . /project
 
-CMD ["python3", "src/microblogging_app/manage.py", "runserver"]
+CMD ["python3", "src/microblogging_app/manage.py", "runserver", "0.0.0.0:8000"]

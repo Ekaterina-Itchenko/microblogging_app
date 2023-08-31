@@ -21,18 +21,23 @@ class PostgreSQLGateway:
     :type db_host: str
     """
 
-    def __init__(self, db_name: str, db_password: str, db_user: str, db_host: str) -> None:
+    def __init__(self, db_name: str, db_password: str, db_user: str, db_host: str, db_port: str) -> None:
         self._db_name = db_name
         self._db_password = db_password
         self._db_user = db_user
         self._db_host = db_host
+        self._db_port = db_port
         self.connection = self._create_connection()
         self.cursor = self._create_cursor()
 
     def _create_connection(self) -> connection:
         """Creates PostgreSQL connection object."""
         return psycopg2.connect(
-            database=self._db_name, user=self._db_user, password=self._db_password, host=self._db_host
+            database=self._db_name,
+            user=self._db_user,
+            password=self._db_password,
+            host=self._db_host,
+            port=self._db_port,
         )
 
     def _create_cursor(self) -> cursor:
