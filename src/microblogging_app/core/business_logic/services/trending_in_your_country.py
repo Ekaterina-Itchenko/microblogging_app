@@ -7,8 +7,6 @@ from typing import TYPE_CHECKING
 from core.models import Tag
 from django.db.models import Count
 
-from microblogging_app.utils import query_debugger
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 
@@ -30,7 +28,6 @@ def get_yesterday_time() -> tuple[datetime, datetime]:
     return datetime_yesterday_start, datetime_yesterday_end
 
 
-@query_debugger
 def get_most_popular_tags(country_name: str) -> QuerySet:
     """
     Function accepts an User country_name(str) and return a QuerySet object that contains
