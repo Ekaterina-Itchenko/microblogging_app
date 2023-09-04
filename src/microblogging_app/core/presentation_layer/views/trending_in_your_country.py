@@ -28,7 +28,6 @@ def trending_in_your_country_controller(request: HttpRequest) -> HttpResponse:
             return render(request=request, template_name="trending_in_your_country.html", context=context)
         else:
             context = {"country_not_exist": True}
-            render(request=request, template_name="trending_in_your_country.html", context=context)
             return render(request=request, template_name="trending_in_your_country.html", context=context)
     else:
         return redirect("sign_in")
