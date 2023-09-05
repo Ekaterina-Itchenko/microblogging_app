@@ -9,8 +9,6 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_GET
 
-from microblogging_app.utils import query_debugger
-
 from .sign_in import sign_in_controller
 
 if TYPE_CHECKING:
@@ -20,7 +18,6 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-@query_debugger
 @require_GET
 def notifications_controller(request: HttpRequest) -> HttpResponse:
     user = request.user

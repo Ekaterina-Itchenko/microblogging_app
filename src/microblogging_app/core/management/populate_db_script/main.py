@@ -45,14 +45,8 @@ from core.models import (
     Tweet,
 )
 from django.contrib.auth import get_user_model
-from dotenv import load_dotenv
-
-from microblogging_app.utils import query_debugger
-
-load_dotenv()
 
 
-@query_debugger
 def populate_tag_table(num: int) -> None:
     """Populates tags table with random data."""
 
@@ -61,7 +55,6 @@ def populate_tag_table(num: int) -> None:
     PopulateTable(records_number=num, dao=tag_dao, fake_factory=tag_factory).execute()
 
 
-@query_debugger
 def populate_users_table(num: int) -> None:
     """Populates users table with random data."""
 
@@ -78,7 +71,6 @@ def populate_users_table(num: int) -> None:
     PopulateTable(records_number=num, dao=user_dao, fake_factory=user_factory).execute()
 
 
-@query_debugger
 def populate_tweet_table(num: int) -> None:
     """Populates tweets table with random data."""
 
@@ -95,7 +87,6 @@ def populate_tweet_table(num: int) -> None:
     PopulateTable(records_number=num, dao=tweet_dao, fake_factory=tweet_factory).execute()
 
 
-@query_debugger
 def populate_tweet_tags_table(num: int) -> None:
     """Populates tweet_tags table with random data."""
 
@@ -114,7 +105,6 @@ def populate_tweet_tags_table(num: int) -> None:
     PopulateTable(records_number=num, dao=tweet_tags_dao, fake_factory=tweet_tags_factory).execute()
 
 
-@query_debugger
 def populate_reposts_table(num: int) -> None:
     """Populates reposts table with random data."""
 
@@ -138,7 +128,6 @@ def populate_reposts_table(num: int) -> None:
     PopulateTable(records_number=num, dao=reposts_dao, fake_factory=reposts_factory).execute()
 
 
-@query_debugger
 def populate_likes_table(num: int) -> None:
     """Populates likes table with random data."""
 
@@ -162,7 +151,6 @@ def populate_likes_table(num: int) -> None:
     PopulateTable(records_number=num, dao=like_dao, fake_factory=like_factory).execute()
 
 
-@query_debugger
 def populate_notifications_table(num: int) -> None:
     """Populates notifications table with notifications from admin."""
 
@@ -186,7 +174,6 @@ def populate_notifications_table(num: int) -> None:
     PopulateTable(records_number=num, dao=notification_user_dao, fake_factory=notification_user_factory).execute()
 
 
-@query_debugger
 def populate_followers_table(num: int) -> None:
     """Populates followers table with random data."""
 

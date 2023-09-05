@@ -13,8 +13,6 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 
-from microblogging_app.utils import query_debugger
-
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
 
@@ -22,7 +20,6 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-@query_debugger
 @require_http_methods(["GET"])
 def select_tag_controller(request: HttpRequest) -> HttpResponse:
     """
