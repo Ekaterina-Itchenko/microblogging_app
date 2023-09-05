@@ -14,46 +14,43 @@ if TYPE_CHECKING:
 fake_data = Faker()
 
 
-class RandomValueFromListProvider:
-    """Provider that generates random value from list."""
+class RandomObjectFromListProvider:
+    """Provider that selects random object from list."""
 
-    def __init__(self, values: list[tuple[int,]]) -> None:
+    def __init__(self, values: list[object]) -> None:
         self._values = values
 
-    def __call__(self) -> int:
-        random_value = choice(self._values)
-        result: int = random_value[0]
-        return result
+    def __call__(self) -> object:
+        random_obj = choice(self._values)
+        return random_obj
 
 
-class RandomDistinctValueFromListProvider:
-    """Provider that generates random value from list other than the one passed during the call."""
+class RandomDistinctObjectFromListProvider:
+    """Provider that selects random object from list other than the one passed during the call."""
 
-    def __init__(self, values: list[tuple[int,]]) -> None:
+    def __init__(self, values: list[object]) -> None:
         self._values = values
 
-    def __call__(self, value: int) -> int:
+    def __call__(self, value: object) -> object:
         random_value = choice(self._values)
-        result: int = random_value[0]
-        if result == value:
+        if random_value == value:
             return self.__call__(value=value)
         else:
-            return result
+            return random_value
 
 
-class RandomValueFromListOrNoneProvider:
+class RandomObjectFromListOrNoneProvider:
     """Provider that generates random value from list."""
 
-    def __init__(self, values: list[tuple[int,]]) -> None:
+    def __init__(self, values: list[object]) -> None:
         self._values = values
 
-    def __call__(self) -> Optional[int]:
+    def __call__(self) -> Optional[object]:
         if len(self._values) == 0:
             return None
         else:
             random_value = choice(self._values)
-            result: int = random_value[0]
-            final_result: Optional[int] = choice([result, None])
+            final_result: Optional[object] = choice([random_value, None])
             return final_result
 
 
@@ -124,9 +121,8 @@ class PasswordProvider:
     def __init__(self, unencrypted_password: str = "password123") -> None:
         self._unencrypted_password = unencrypted_password
 
-    def __call__(self) -> dict[str, str]:
+    def __call__(self) -> str:
         hasher = PBKDF2PasswordHasher()
         salt = hasher.salt()
-        encrypted_password = hasher.encode(password=self._unencrypted_password, salt=salt)
-        result_dict = {"unencrypted_password": self._unencrypted_password, "encrypted_password": encrypted_password}
-        return result_dict
+        encrypted_password: str = hasher.encode(password=self._unencrypted_password, salt=salt)
+        return encrypted_password

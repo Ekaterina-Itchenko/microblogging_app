@@ -2,40 +2,48 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from core.management.populate_db_script.data_access.dto import (
-    NotificationDTO,
-    NotificationUserDTO,
-)
+from core.models import Notification, NotificationType
 
 if TYPE_CHECKING:
     from core.management.populate_db_script.providers import (
         NotificationMessageProvider,
-        RandomValueFromListProvider,
+        RandomObjectFromListProvider,
     )
 
 
 class NotificationFactory:
-    """Contains methods for generating values for NotificationDTO."""
+    """Contains methods for generating values for Notification model."""
 
     def __init__(
         self,
         notification_message_provider: NotificationMessageProvider,
-        random_user_provider: RandomValueFromListProvider,
-        random_notification_id_provider: RandomValueFromListProvider,
-        random_note_type_provider: RandomValueFromListProvider,
+        admin_notification_type_object: NotificationType,
     ):
-        self._random_user_provider = random_user_provider
         self._notification_message_provider = notification_message_provider
-        self._random_note_type_provider = random_note_type_provider
-        self._random_notification_id_provider = random_notification_id_provider
+        self._admin_notification_type_object = admin_notification_type_object
 
-    def generate(self) -> NotificationDTO:
+    def generate(self) -> Notification:
         """Generates random data for NotificationDTO"""
 
-        return NotificationDTO(
-            user=NotificationUserDTO(
-                user_id=self._random_user_provider(), notification_id=self._random_notification_id_provider()
-            ),
-            notification_type_id=self._random_note_type_provider(),
-            message=self._notification_message_provider(),
+        return Notification(
+            message=self._notification_message_provider(), notification_type=self._admin_notification_type_object
+        )
+
+
+class NotificationUserFactory:
+    """Contains methods for generating values for Notification model."""
+
+    def __init__(
+        self,
+        random_notification_provider: RandomObjectFromListProvider,
+        random_user_provider: RandomObjectFromListProvider,
+    ):
+        self._random_notification_provider = random_notification_provider
+        self._random_user_provider = random_user_provider
+
+    def generate(self) -> Notification:
+        """Generates random data for NotificationDTO"""
+
+        return Notification.user.through(
+            notification=self._random_notification_provider(), user=self._random_user_provider()
         )

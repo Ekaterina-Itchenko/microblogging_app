@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from core.management.populate_db_script.data_access.dto import TagDTO
+from core.models import Tag
 
 if TYPE_CHECKING:
     from core.management.populate_db_script.providers import RandomTagProvider
@@ -14,7 +14,7 @@ class TagFactory:
     def __init__(self, random_tag_provider: RandomTagProvider):
         self._random_tag_provider = random_tag_provider
 
-    def generate(self) -> TagDTO:
+    def generate(self) -> Tag:
         """Generates random data for TagDTO"""
 
-        return TagDTO(name=self._random_tag_provider())
+        return Tag(name=self._random_tag_provider())

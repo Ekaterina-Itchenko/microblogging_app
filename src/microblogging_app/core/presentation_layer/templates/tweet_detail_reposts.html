@@ -39,7 +39,7 @@
                                 </a>
                             </div>
                             <div style="float: left;">
-                                {% if profile != user %}
+                                {% if profile != request.user %}
                                     {% if profile not in auth_user_following %}
                                         <form method="post" action="{% url 'follow' profile.username %}">
                                             {% csrf_token %}

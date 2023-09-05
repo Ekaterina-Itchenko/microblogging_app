@@ -1,6 +1,6 @@
 from .followers import FollowersFactory
 from .like import LikeFactory
-from .notification import NotificationFactory
+from .notification import NotificationFactory, NotificationUserFactory
 from .repost import RepostFactory
 from .tag import TagFactory
 from .tweet import TweetFactory
@@ -16,4 +16,5 @@ __all__ = [
     "FollowersFactory",
     "TweetTagsFactory",
     "UserFactory",
+    "NotificationUserFactory",
 ]
