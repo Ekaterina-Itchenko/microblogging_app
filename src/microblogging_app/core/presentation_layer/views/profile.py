@@ -22,8 +22,6 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_GET, require_http_methods
 
-from microblogging_app.utils import query_debugger
-
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
 
@@ -31,7 +29,6 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-@query_debugger
 @require_GET
 def profile_controller(request: HttpRequest, username: str) -> HttpResponse:
     """User profile controller."""
@@ -52,7 +49,6 @@ def profile_controller(request: HttpRequest, username: str) -> HttpResponse:
     return render(request=request, template_name="profile.html", context=context)
 
 
-@query_debugger
 @require_GET
 def profile_reposts_controller(request: HttpRequest, username: str) -> HttpResponse:
     """User profile controller."""
@@ -73,7 +69,6 @@ def profile_reposts_controller(request: HttpRequest, username: str) -> HttpRespo
     return render(request=request, template_name="profile_reposts.html", context=context)
 
 
-@query_debugger
 @require_http_methods(["POST", "GET"])
 def edit_profile_controller(request: HttpRequest) -> HttpResponse:
     """

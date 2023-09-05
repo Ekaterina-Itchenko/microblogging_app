@@ -9,8 +9,6 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import render
 from django.views.decorators.http import require_GET
 
-from microblogging_app.utils import query_debugger
-
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
 
@@ -19,7 +17,6 @@ logger = logging.getLogger(__name__)
 
 
 @require_GET
-@query_debugger
 def get_tweets_by_tag_country_controller(request: HttpRequest, tag_name: str, country_name: str) -> HttpResponse:
     """Controller to display tweets related with passed tag in your country."""
 

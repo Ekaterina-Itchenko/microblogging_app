@@ -1,4 +1,4 @@
-from .follow import FollowersDTO, FollowingDTO
+from .follow import FollowersDTO, FollowersPageDTO, FollowingDTO, FollowingPageDTO
 from .home import FollowingTweetsRepostsDTO
 from .profile import EditProfileDTO, ProfileDTO
 from .registration import RegistrationDTO
@@ -19,4 +19,6 @@ __all__ = [
     "TagDTO",
     "FollowingTweetsRepostsDTO",
     "TweetTagsDTO",
+    "FollowingPageDTO",
+    "FollowersPageDTO",
 ]

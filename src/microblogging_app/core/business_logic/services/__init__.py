@@ -1,5 +1,12 @@
 from .country import get_countries
-from .follow import follow_user, unfollow_user, user_followers, user_following
+from .follow import (
+    follow_user,
+    get_followers_page_data,
+    get_following_page_data,
+    unfollow_user,
+    user_followers_by_username,
+    user_following_by_username,
+)
 from .get_tags import get_tags_func
 from .home import get_replies, get_tweets_reposts_from_following_users, ordering_tweets
 from .like import like_tweet
@@ -31,8 +38,8 @@ __all__ = [
     "create_tweet",
     "follow_user",
     "unfollow_user",
-    "user_followers",
-    "user_following",
+    "user_followers_by_username",
+    "user_following_by_username",
     "get_tweet_info",
     "get_replies",
     "edit_tweet",
@@ -43,4 +50,6 @@ __all__ = [
     "get_profile_with_reposts_info",
     "get_countries",
     "get_user_notifications",
+    "get_followers_page_data",
+    "get_following_page_data",
 ]

@@ -36,7 +36,7 @@ def get_replies(tweet_id: int) -> QuerySet:
     return replies
 
 
-def get_tweets_reposts_from_following_users(user: User) -> FollowingTweetsRepostsDTO:
+def get_tweets_reposts_from_following_users(user: User, order_by: str) -> FollowingTweetsRepostsDTO:
     """
     Retrieve tweets and reposted tweets from users followed by the given user.
     Args:
@@ -58,7 +58,8 @@ def get_tweets_reposts_from_following_users(user: User) -> FollowingTweetsRepost
         .filter(Q(user__in=following_users) | Q(reposts__user__in=following_users))
         .order_by("created_at")
     )
-    result_dto = FollowingTweetsRepostsDTO(tweets=tweets, following_users=following_users)
+    ordered_tweets = ordering_tweets(tweets=tweets, condition=order_by)
+    result_dto = FollowingTweetsRepostsDTO(tweets=ordered_tweets, following_users=following_users)
 
     return result_dto
 

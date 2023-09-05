@@ -8,8 +8,6 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import redirect
 from django.views.decorators.http import require_http_methods
 
-from microblogging_app.utils import query_debugger
-
 if TYPE_CHECKING:
     from django.http import HttpRequest
 
@@ -17,7 +15,6 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-@query_debugger
 @require_http_methods(request_method_list=["POST"])
 def repost_tweet_controller(request: HttpRequest, tweet_id: int) -> HttpResponse:
     """

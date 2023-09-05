@@ -5,15 +5,13 @@ from typing import TYPE_CHECKING
 
 from core.business_logic.services import (
     follow_user,
+    get_followers_page_data,
+    get_following_page_data,
     unfollow_user,
-    user_followers,
-    user_following,
 )
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_GET, require_http_methods, require_POST
-
-from microblogging_app.utils import query_debugger
 
 if TYPE_CHECKING:
     from django.http import HttpRequest
@@ -22,7 +20,6 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-@query_debugger
 @require_http_methods(request_method_list=["POST"])
 def follow_controller(request: HttpRequest, username: str) -> HttpResponse:
     """Follow user with passed ID controller."""
@@ -36,7 +33,6 @@ def follow_controller(request: HttpRequest, username: str) -> HttpResponse:
     return redirect(to=request.META.get("HTTP_REFERER"))
 
 
-@query_debugger
 @require_POST
 def unfollow_controller(request: HttpRequest, username: str) -> HttpResponse:
     """Unfollow user with passed ID controller."""
@@ -50,49 +46,33 @@ def unfollow_controller(request: HttpRequest, username: str) -> HttpResponse:
     return redirect(to=request.META.get("HTTP_REFERER"))
 
 
-@query_debugger
 @require_GET
 def followers_controller(request: HttpRequest, username: str) -> HttpResponse:
     """User followers controller."""
 
-    authorized_user_dto = user_following(request.user.username)
-    auth_user_following = authorized_user_dto.following
-    followers_dto = user_followers(user_username=username)
-    followers = followers_dto.followers
-    fullname = followers_dto.user_fullname
+    followers_controller_data = get_followers_page_data(user_username=username, auth_user=request.user)
     context = {
-        "followers": followers,
-        "user_fullname": fullname,
-        "user_username": username,
-        "auth_user_following": auth_user_following,
-        "followers_num": followers_dto.followers_num,
-        "following_num": followers_dto.following_num,
+        "followers": followers_controller_data.followers,
+        "user_fullname": followers_controller_data.user_fullname,
+        "user_username": followers_controller_data.user_username,
+        "auth_user_following": followers_controller_data.auth_user_following,
+        "followers_num": followers_controller_data.followers_num,
+        "following_num": followers_controller_data.following_num,
     }
     return render(request=request, template_name="followers.html", context=context)
 
 
-@query_debugger
 @require_GET
 def following_controller(request: HttpRequest, username: str) -> HttpResponse:
     """User following controller."""
 
-    authorized_user_dto = user_following(request.user.username)
-    auth_user_following = authorized_user_dto.following
-    auth_user_fullname = authorized_user_dto.user_fullname
-    if username == request.user.username:
-        following_dto = authorized_user_dto
-        following = auth_user_following
-        fullname = auth_user_fullname
-    else:
-        following_dto = user_following(user_username=username)
-        following = following_dto.following
-        fullname = following_dto.user_fullname
+    following_controller_data = get_following_page_data(user_username=username, auth_user=request.user)
     context = {
-        "following": following,
-        "user_fullname": fullname,
-        "user_username": username,
-        "auth_user_following": auth_user_following,
-        "followers_num": following_dto.followers_num,
-        "following_num": following_dto.following_num,
+        "following": following_controller_data.following,
+        "user_fullname": following_controller_data.user_fullname,
+        "user_username": following_controller_data.user_username,
+        "auth_user_following": following_controller_data.auth_user_following,
+        "followers_num": following_controller_data.followers_num,
+        "following_num": following_controller_data.following_num,
     }
     return render(request=request, template_name="following.html", context=context)

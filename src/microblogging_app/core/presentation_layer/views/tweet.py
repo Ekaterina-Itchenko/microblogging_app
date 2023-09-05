@@ -16,8 +16,6 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods
 
-from microblogging_app.utils import query_debugger
-
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
 
@@ -25,7 +23,6 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-@query_debugger
 @require_http_methods(request_method_list=["GET"])
 def tweet_detail_controller(request: HttpRequest, tweet_id: int) -> HttpResponse:
     """
@@ -46,7 +43,6 @@ def tweet_detail_controller(request: HttpRequest, tweet_id: int) -> HttpResponse
     return render(request, "tweet_detail.html", context)
 
 
-@query_debugger
 @require_http_methods(request_method_list=["GET"])
 def tweet_detail_controller_likes(request: HttpRequest, tweet_id: int) -> HttpResponse:
     """
@@ -64,7 +60,6 @@ def tweet_detail_controller_likes(request: HttpRequest, tweet_id: int) -> HttpRe
     return render(request, "tweet_detail_likes.html", context)
 
 
-@query_debugger
 @require_http_methods(request_method_list=["GET"])
 def tweet_detail_controller_reposts(request: HttpRequest, tweet_id: int) -> HttpResponse:
     """
@@ -82,7 +77,6 @@ def tweet_detail_controller_reposts(request: HttpRequest, tweet_id: int) -> Http
     return render(request, "tweet_detail_reposts.html", context)
 
 
-@query_debugger
 @require_http_methods(["GET", "POST"])
 def add_tweet_controller(request: HttpRequest) -> HttpResponse:
     """Add tweet controller."""
@@ -104,7 +98,6 @@ def add_tweet_controller(request: HttpRequest) -> HttpResponse:
     return HttpResponseBadRequest("Incorrect HTTP method.")
 
 
-@query_debugger
 @require_http_methods(["GET", "POST"])
 def edit_tweet_controller(request: HttpRequest, tweet_id: int) -> HttpResponse:
     """Add tweet controller."""
