@@ -2,15 +2,16 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from core.management.populate_db_script.data_access.dto import UserDTO
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AbstractBaseUser
 
 if TYPE_CHECKING:
     from core.management.populate_db_script.providers import (
         PasswordProvider,
         RandomBirthDateProvider,
+        RandomObjectFromListProvider,
         RandomTextProvider,
         RandomUserProfileProvider,
-        RandomValueFromListProvider,
     )
 
 
@@ -19,7 +20,7 @@ class UserFactory:
 
     def __init__(
         self,
-        random_country_provider: RandomValueFromListProvider,
+        random_country_provider: RandomObjectFromListProvider,
         random_text_provider: RandomTextProvider,
         random_birth_date_provider: RandomBirthDateProvider,
         random_profile_provider: RandomUserProfileProvider,
@@ -31,23 +32,22 @@ class UserFactory:
         self._random_profile_provider = random_profile_provider
         self._password_provider = password_provider
 
-    def generate(self) -> UserDTO:
+    def generate(self) -> AbstractBaseUser:
         """Generates random data for UserDTO"""
-
+        user_model = get_user_model()
         profile = self._random_profile_provider()
-        passwords = self._password_provider()
+        password = self._password_provider()
         description = self._random_text_provider()
-        country_id = self._random_country_provider()
+        country = self._random_country_provider()
         birth_date = self._random_birth_date_provider()
-        return UserDTO(
+        return user_model(
             description=description,
-            country_id=country_id,
+            country=country,
             birth_date=birth_date,
             username=profile["username"],
             first_name=profile["first_name"],
             last_name=profile["last_name"],
             email=profile["email"],
             is_active=True,
-            encrypted_password=passwords["encrypted_password"],
-            unencrypted_password=passwords["unencrypted_password"],
+            password=password,
         )

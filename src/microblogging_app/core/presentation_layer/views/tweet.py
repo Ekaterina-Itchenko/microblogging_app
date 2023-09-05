@@ -59,7 +59,8 @@ def tweet_detail_controller_likes(request: HttpRequest, tweet_id: int) -> HttpRe
     """
 
     tweet = get_tweet_info(tweet_id)
-    context = {"tweet": tweet}
+    auth_user_following = request.user.following.all()
+    context = {"tweet": tweet, "auth_user_following": auth_user_following}
     return render(request, "tweet_detail_likes.html", context)
 
 
@@ -76,7 +77,8 @@ def tweet_detail_controller_reposts(request: HttpRequest, tweet_id: int) -> Http
     """
 
     tweet = get_tweet_info(tweet_id)
-    context = {"tweet": tweet}
+    auth_user_following = request.user.following.all()
+    context = {"tweet": tweet, "auth_user_following": auth_user_following}
     return render(request, "tweet_detail_reposts.html", context)
 
 
