@@ -1,5 +1,5 @@
 """
-Custom migration that populate Country table with default values.
+Custom migration that populate Country table with default values from file.
 """
 
 from typing import Any
@@ -7,7 +7,7 @@ from typing import Any
 from core.models import Country
 from django.db import migrations
 
-DEFAULT_VALUES = (
+DEFAULT_VALUES = [
     "Afghanistan",
     "Albania",
     "Algeria",
@@ -204,19 +204,18 @@ DEFAULT_VALUES = (
     "Yemen",
     "Zambia",
     "Zimbabwe",
-)
+]
 
 
 def populate_table(apps: Any, schema_editor: Any) -> None:
     """Populates table with default values."""
-    for value in DEFAULT_VALUES:
-        Country.objects.create(name=value)
+    countries_list = [Country(name=country) for country in DEFAULT_VALUES]
+    Country.objects.bulk_create(countries_list, ignore_conflicts=True)
 
 
 def reverse_table_population(apps: Any, schema_editor: Any) -> None:
     """Reverse table population."""
-    for value in DEFAULT_VALUES:
-        Country.objects.get(name=value).delete()
+    Country.objects.raw("TRUNCATE TABLE countries")
 
 
 class Migration(migrations.Migration):
