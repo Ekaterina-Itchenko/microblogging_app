@@ -1,6 +1,6 @@
 from typing import Any
 
-from core.presentation_layer.validators import (
+from core.presentation_layer.web.validators import (
     ValidateFileSize,
     ValidateImageExtensions,
     ValidateUserAge,

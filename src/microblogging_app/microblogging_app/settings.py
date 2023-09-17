@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.forms",
+    "rest_framework",
     # internal
     "core.apps.CoreConfig",
 ]
@@ -67,7 +68,7 @@ ROOT_URLCONF = "microblogging_app.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "core", "presentation_layer", "templates")],
+        "DIRS": [os.path.join(BASE_DIR, "core", "presentation_layer", "web", "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

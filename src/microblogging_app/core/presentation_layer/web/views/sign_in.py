@@ -6,8 +6,8 @@ from typing import TYPE_CHECKING
 from core.business_logic.dto import SignInDTO
 from core.business_logic.errors import InvalidAuthCredentialsError
 from core.business_logic.services import authenticate_user
-from core.presentation_layer.converters import convert_data_from_form_to_dto
-from core.presentation_layer.forms import SignInForm
+from core.presentation_layer.web.converters import convert_data_from_form_to_dto
+from core.presentation_layer.web.forms import SignInForm
 from django.contrib.auth import login
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods

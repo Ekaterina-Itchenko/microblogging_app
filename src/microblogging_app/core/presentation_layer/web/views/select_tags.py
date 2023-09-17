@@ -6,9 +6,9 @@ from typing import TYPE_CHECKING
 from core.business_logic.dto import TagDTO
 from core.business_logic.errors import TagNotFound
 from core.business_logic.services import get_tweets_by_tag_name
-from core.presentation_layer.converters import convert_data_from_form_to_dto
-from core.presentation_layer.forms import SelectTagsForm
-from core.presentation_layer.pagination import CustomPagination, PageNotExists
+from core.presentation_layer.web.converters import convert_data_from_form_to_dto
+from core.presentation_layer.web.forms import SelectTagsForm
+from core.presentation_layer.web.pagination import CustomPagination, PageNotExists
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods

@@ -6,8 +6,8 @@ from typing import TYPE_CHECKING
 from core.business_logic.dto import AddTweetDTO
 from core.business_logic.errors import TweetNotFound
 from core.business_logic.services import create_tweet, get_tweet_info
-from core.presentation_layer.converters import convert_data_from_form_to_dto
-from core.presentation_layer.forms import AddTweetForm
+from core.presentation_layer.web.converters import convert_data_from_form_to_dto
+from core.presentation_layer.web.forms import AddTweetForm
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods

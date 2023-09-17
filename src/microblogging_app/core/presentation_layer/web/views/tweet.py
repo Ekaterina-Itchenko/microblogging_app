@@ -10,8 +10,8 @@ from core.business_logic.services import (
     get_replies,
     get_tweet_info,
 )
-from core.presentation_layer.converters import convert_data_from_form_to_dto
-from core.presentation_layer.forms import AddTweetForm, EditTweetForm
+from core.presentation_layer.web.converters import convert_data_from_form_to_dto
+from core.presentation_layer.web.forms import AddTweetForm, EditTweetForm
 from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods

@@ -1,4 +1,4 @@
-from core.presentation_layer.validators import ValidateMaxTagCount
+from core.presentation_layer.web.validators import ValidateMaxTagCount
 from django import forms
 
 
