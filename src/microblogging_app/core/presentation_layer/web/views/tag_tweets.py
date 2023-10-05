@@ -4,7 +4,7 @@ import logging
 from typing import TYPE_CHECKING
 
 from core.business_logic.services import get_tweets_by_tag_name_country_name
-from core.presentation_layer.pagination import CustomPagination, PageNotExists
+from core.presentation_layer.web.pagination import CustomPagination, PageNotExists
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render
 from django.views.decorators.http import require_GET

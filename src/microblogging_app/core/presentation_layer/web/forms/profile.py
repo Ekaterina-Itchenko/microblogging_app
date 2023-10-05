@@ -1,10 +1,11 @@
 from typing import Any
 
-from core.presentation_layer.validators import (
+from core.presentation_layer.common.validators import (
     ValidateFileSize,
     ValidateImageExtensions,
     ValidateUserAge,
 )
+from core.presentation_layer.web.validators import WebValidator
 from django import forms
 
 
@@ -15,7 +16,10 @@ class EditProfileForm(forms.Form):
         label="Photo",
         allow_empty_file=False,
         required=False,
-        validators=[ValidateImageExtensions(["png", "jpeg", "jpg"]), ValidateFileSize(max_size=5_000_000)],
+        validators=[
+            WebValidator(ValidateImageExtensions(["png", "jpeg", "jpg"])),
+            WebValidator(ValidateFileSize(max_size=5_000_000)),
+        ],
         widget=forms.FileInput(attrs={"class": "form-control"}),
     )
     first_name = forms.CharField(
@@ -43,7 +47,7 @@ class EditProfileForm(forms.Form):
     birth_date = forms.DateField(
         label="Date of birth",
         help_text="Enter date of birth in following format: YYYY-MM-DD",
-        validators=[ValidateUserAge(min_age=18)],
+        validators=[WebValidator(ValidateUserAge(min_age=18))],
         widget=forms.DateInput(attrs={"class": "form-control"}),
         required=True,
     )

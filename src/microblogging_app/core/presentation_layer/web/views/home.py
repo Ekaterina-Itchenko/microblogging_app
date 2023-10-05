@@ -4,7 +4,7 @@ import logging
 from typing import TYPE_CHECKING
 
 from core.business_logic.services import get_tweets_reposts_from_following_users
-from core.presentation_layer.pagination import CustomPagination, PageNotExists
+from core.presentation_layer.web.pagination import CustomPagination, PageNotExists
 from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods
@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-@require_http_methods(request_method_list=["GET", "POST"])
+@require_http_methods(request_method_list=["GET"])
 def index_controller(request: HttpRequest) -> HttpResponse:
     """
     Display the home page containing tweets and handling tweet creation.
@@ -31,7 +31,7 @@ def index_controller(request: HttpRequest) -> HttpResponse:
     user = request.user
     order_by = request.GET.get("order_by", "newest")
     if user.is_authenticated:
-        tweets_reposts_dto = get_tweets_reposts_from_following_users(user, order_by=order_by)
+        tweets_reposts_dto = get_tweets_reposts_from_following_users(user_id=user.pk, order_by=order_by)
         tweets = tweets_reposts_dto.tweets
         following_users = tweets_reposts_dto.following_users
     else:

@@ -36,7 +36,7 @@ def get_replies(tweet_id: int) -> QuerySet:
     return replies
 
 
-def get_tweets_reposts_from_following_users(user: User, order_by: str) -> FollowingTweetsRepostsDTO:
+def get_tweets_reposts_from_following_users(user_id: int, order_by: str) -> FollowingTweetsRepostsDTO:
     """
     Retrieve tweets and reposted tweets from users followed by the given user.
     Args:
@@ -45,7 +45,7 @@ def get_tweets_reposts_from_following_users(user: User, order_by: str) -> Follow
         QuerySet of tweets from following users.
     """
 
-    following_users = user.following.all()
+    following_users = User.objects.get(id=user_id).following.all()
 
     tweets = (
         Tweet.objects.annotate(

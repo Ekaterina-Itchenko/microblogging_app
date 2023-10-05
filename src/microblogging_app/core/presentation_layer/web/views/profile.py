@@ -14,9 +14,9 @@ from core.business_logic.services import (
     get_profile_info,
     get_profile_with_reposts_info,
 )
-from core.presentation_layer.converters import convert_data_from_form_to_dto
-from core.presentation_layer.forms import EditProfileForm
-from core.presentation_layer.pagination import CustomPagination, PageNotExists
+from core.presentation_layer.common.converters import convert_data_from_request_to_dto
+from core.presentation_layer.web.forms import EditProfileForm
+from core.presentation_layer.web.pagination import CustomPagination, PageNotExists
 from django.contrib.auth import logout
 from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect, render
@@ -102,7 +102,7 @@ def edit_profile_controller(request: HttpRequest) -> HttpResponse:
             request.FILES,
         )
         if form.is_valid():
-            received_data: EditProfileDTO = convert_data_from_form_to_dto(EditProfileDTO, form.cleaned_data)
+            received_data: EditProfileDTO = convert_data_from_request_to_dto(EditProfileDTO, form.cleaned_data)
             try:
                 edit_profile(data=received_data)
                 if received_data.old_email != received_data.email:

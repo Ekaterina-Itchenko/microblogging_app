@@ -20,4 +20,4 @@ class EditTweetDTO:
 
     content: str
     tags: str
-    tweet_id: int
+    tweet_id: Optional[int] = None

@@ -1,5 +1,6 @@
 import logging
 import re
+from typing import Any
 
 from core.business_logic.dto import AddTweetDTO, EditTweetDTO
 from core.business_logic.errors import TweetNotFound
@@ -13,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 @query_debugger
-def create_tweet(data: AddTweetDTO) -> None:
+def create_tweet(data: AddTweetDTO) -> Any:
     """
     Create a new tweet.
     Args:
@@ -53,6 +54,7 @@ def create_tweet(data: AddTweetDTO) -> None:
                 "reply_to": data.reply_to_id,
             },
         )
+    return created_tweet.pk
 
 
 def get_tweet_info(tweet_id: int) -> Tweet:
@@ -82,13 +84,13 @@ def get_tweet_info(tweet_id: int) -> Tweet:
 
 
 @query_debugger
-def edit_tweet(data: EditTweetDTO) -> None:
+def edit_tweet(data: EditTweetDTO) -> Any:
     """
     Edit tweet in the DB.
     Args:
         data (EditTweetData): Data containing tweet information.
     Returns:
-        None
+        tweet_id or None
     """
     with transaction.atomic():
         edited_tweet: Tweet = Tweet.objects.prefetch_related("tags").get(pk=data.tweet_id)
@@ -110,3 +112,4 @@ def edit_tweet(data: EditTweetDTO) -> None:
         edited_tweet.content = data.content
         edited_tweet.save()
         logger.info("Successfully updated tweet", extra={"tweet_id": data.tweet_id, "content": data.content})
+    return edited_tweet.pk
