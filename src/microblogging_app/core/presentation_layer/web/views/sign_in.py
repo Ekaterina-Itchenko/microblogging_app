@@ -6,8 +6,8 @@ from typing import TYPE_CHECKING
 from core.business_logic.dto import SignInDTO
 from core.business_logic.errors import InvalidAuthCredentialsError
 from core.business_logic.services import authenticate_user
-from core.presentation_layer.converters import convert_data_from_form_to_dto
-from core.presentation_layer.forms import SignInForm
+from core.presentation_layer.common.converters import convert_data_from_request_to_dto
+from core.presentation_layer.web.forms import SignInForm
 from django.contrib.auth import login
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods
@@ -32,7 +32,7 @@ def sign_in_controller(request: HttpRequest) -> HttpResponse:
     else:
         form = SignInForm(request.POST)
         if form.is_valid():
-            received_data = convert_data_from_form_to_dto(SignInDTO, form.cleaned_data)
+            received_data = convert_data_from_request_to_dto(SignInDTO, form.cleaned_data)
             try:
                 user = authenticate_user(data=received_data)
             except InvalidAuthCredentialsError:

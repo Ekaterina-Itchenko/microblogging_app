@@ -4,14 +4,15 @@ import logging
 from typing import TYPE_CHECKING
 
 from core.business_logic.dto import AddTweetDTO, EditTweetDTO
+from core.business_logic.errors import TweetNotFound
 from core.business_logic.services import (
     create_tweet,
     edit_tweet,
     get_replies,
     get_tweet_info,
 )
-from core.presentation_layer.converters import convert_data_from_form_to_dto
-from core.presentation_layer.forms import AddTweetForm, EditTweetForm
+from core.presentation_layer.common.converters import convert_data_from_request_to_dto
+from core.presentation_layer.web.forms import AddTweetForm, EditTweetForm
 from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods
@@ -70,8 +71,10 @@ def tweet_detail_controller_reposts(request: HttpRequest, tweet_id: int) -> Http
     Returns:
         HttpResponse: The rendered tweet detail likes page.
     """
-
-    tweet = get_tweet_info(tweet_id)
+    try:
+        tweet = get_tweet_info(tweet_id)
+    except TweetNotFound:
+        return HttpResponseBadRequest("Tweet is not found.")
     auth_user_following = request.user.following.all()
     context = {"tweet": tweet, "auth_user_following": auth_user_following}
     return render(request, "tweet_detail_reposts.html", context)
@@ -89,7 +92,7 @@ def add_tweet_controller(request: HttpRequest) -> HttpResponse:
         form = AddTweetForm(request.POST)
         if form.is_valid():
             logger.info("form is valid")
-            data = convert_data_from_form_to_dto(dto=AddTweetDTO, data_from_form=form.cleaned_data)
+            data = convert_data_from_request_to_dto(dto=AddTweetDTO, data_from_request=form.cleaned_data)
             data.user = request.user
             create_tweet(data=data)
             return redirect(to="profile", username=request.user.username)
@@ -115,7 +118,7 @@ def edit_tweet_controller(request: HttpRequest, tweet_id: int) -> HttpResponse:
         form = EditTweetForm(request.POST)
         if form.is_valid():
             logger.info("form is valid")
-            data = convert_data_from_form_to_dto(dto=EditTweetDTO, data_from_form=form.cleaned_data)
+            data = convert_data_from_request_to_dto(dto=EditTweetDTO, data_from_request=form.cleaned_data)
             edit_tweet(data=data)
             return redirect(to="profile", username=request.user.username)
         else:

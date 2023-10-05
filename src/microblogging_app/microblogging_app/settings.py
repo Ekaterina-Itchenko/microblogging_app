@@ -48,8 +48,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.forms",
+    "rest_framework",
     # internal
     "core.apps.CoreConfig",
+    "drf_yasg",
 ]
 
 MIDDLEWARE = [
@@ -67,7 +69,7 @@ ROOT_URLCONF = "microblogging_app.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "core", "presentation_layer", "templates")],
+        "DIRS": [os.path.join(BASE_DIR, "core", "presentation_layer", "web", "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -203,4 +205,18 @@ CACHES = {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
         "LOCATION": os.environ["REDIS_URL"],
     }
+}
+
+
+REST_FRAMEWORK = {
+    "DEFAULT_THROTTLE_RATES": {"user": "100/day"},
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
+    ],
+}
+
+
+SWAGGER_SETTINGS = {
+    "LOGOUT_URL": "/logout/",
+    "LOGIN_URL": "/sing_in/",
 }

@@ -1,4 +1,5 @@
-from core.presentation_layer.validators import ValidateUserAge
+from core.presentation_layer.common.validators import ValidateUserAge
+from core.presentation_layer.web.validators import WebValidator
 from django import forms
 
 
@@ -11,7 +12,7 @@ class RegistrationForm(forms.Form):
     )
     birth_date = forms.DateField(
         label="Birth date",
-        validators=[ValidateUserAge(min_age=18)],
+        validators=[WebValidator(ValidateUserAge(min_age=18))],
         widget=forms.DateInput(attrs={"class": "form-control"}),
         help_text="Enter date of birth in following format: YYYY-MM-DD",
     )
