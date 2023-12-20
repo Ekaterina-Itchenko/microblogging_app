@@ -4,7 +4,10 @@ from typing import TYPE_CHECKING
 
 from core.business_logic.services import get_tweets_reposts_from_following_users
 from core.presentation_layer.api_v1.pagination import APIPAginator
-from core.presentation_layer.api_v1.serializers import TweetSerializer, UserSerialiser
+from core.presentation_layer.api_v1.serializers import (
+    TweetSerializer,
+    UserFullInfoSerialazer,
+)
 from rest_framework import parsers
 from rest_framework.decorators import api_view, parser_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -21,7 +24,7 @@ def get_following_users_api_controller(request: Request, user_id: int) -> Respon
     order_by = request.query_params.get("order_by", "newest")
     tweets_reposts_dto = get_tweets_reposts_from_following_users(user_id, order_by=order_by)
     following_users = tweets_reposts_dto.following_users
-    following_users_serialiser = UserSerialiser(following_users, many=True)
+    following_users_serialiser = UserFullInfoSerialazer(following_users, many=True)
     return Response(data=following_users_serialiser.data)
 
 
